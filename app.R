@@ -56,6 +56,11 @@ ui <- fluidPage(
         tabPanel(
           "Accuracy",
           verbatimTextOutput("printAccurary")
+        ),
+        tabPanel(
+          "Residuals",
+          fluidRow(column(12, plotlyOutput("timeplot_resid"))),
+          fluidRow(column(12, plotlyOutput("acf_resid")))
         )
       )
     )
@@ -104,13 +109,13 @@ server <- function(input, output, session) {
     ts_data <- ts()
     ggplotly(
       model_tbl_arimax() |>
-        modeltime_calibrate(testing(splits)) |>
+        modeltime_calibrate(new_data = testing(splits)) |>
         modeltime_forecast(
           new_data = testing(splits),
           actual_data = ts_data,
           conf_interval = F
         ) |>
-        plot_modeltime_forecast(.interactive = FALSE) +
+        plot_modeltime_forecast(.interactive = F) +
         labs(title = NULL) +
         theme(legend.position = "none")
     )
@@ -134,7 +139,30 @@ server <- function(input, output, session) {
     model_tbl_arimax() |>
       modeltime_accuracy(testing(splits))
   })
-
+  
+  output$timeplot_resid <- renderPlotly({
+    splits <- arimax()$splits
+    ggplotly(
+      model_tbl_arimax() |>
+        modeltime_calibrate(new_data = testing(splits)) |>
+        modeltime_residuals() |> 
+        plot_modeltime_residuals(.type = "timeplot", .interactive = F) +
+        labs(title = NULL) +
+        theme(legend.position = "none")
+    )
+  })
+  
+  output$acf_resid <- renderPlotly({
+    splits <- arimax()$splits
+    ggplotly(
+      model_tbl_arimax() |>
+        modeltime_calibrate(new_data = testing(splits)) |>
+        modeltime_residuals() |> 
+        plot_modeltime_residuals(.type = "acf", .interactive = F) +
+        labs(title = NULL) +
+        theme(legend.position = "none")
+    )
+  })
   
 }
 
