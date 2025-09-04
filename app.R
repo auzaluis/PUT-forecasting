@@ -53,10 +53,6 @@ ui <- fluidPage(
           "Long-term",
           plotlyOutput("refit_forecastPlot")
         ),
-        # tabPanel(
-        #   "jaja",
-        #   verbatimTextOutput("jaja")
-        # ),
         tabPanel(
           "Summary",
           verbatimTextOutput("printFit")
@@ -147,7 +143,7 @@ server <- function(input, output, session) {
   output$refit_forecastPlot <- renderPlotly({
     splits <- arimax()$splits
     ts_data <- ts()
-    future <- generate_future_ts(df1(), input$hours, superbowl_dates)
+    future <- generate_future_ts(ts() |> as_tibble(), input$hours, superbowl_dates)
     new_data <- bind_rows(testing(splits), future)
     ggplotly(
       arimax_model_tbl() |>
@@ -162,13 +158,6 @@ server <- function(input, output, session) {
         theme(legend.position = "none")
     )
   })
-  
-  # output$jaja <- renderPrint({
-  #   splits <- arimax()$splits
-  #   future <- generate_future_ts(df1(), input$hours, superbowl_dates)
-  #   new_data <- bind_rows(testing(splits), future)
-  #   future
-  # })
   
   output$printFit <- renderPrint({
     arimax_fit() |>
