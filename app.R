@@ -7,13 +7,14 @@ pacman::p_load(
   shinyWidgets
 )
 
-df <- read_parquet("data/raw_data.parquet") |> 
-  mutate(
-    intervals_dim = ymd_hms(intervals_dim),
-    date = as_date(intervals_dim),
-    hour = hour(intervals_dim)
-  )
+# Modules
+source("scripts/preprocess.R")
 
+# Load raw_data
+path <- "data/raw_data.parquet"
+df <- load_data(path)
+
+# UI
 ui <- fluidPage(
   
   titlePanel("People Using TV Forecasting"),
@@ -21,7 +22,7 @@ ui <- fluidPage(
     sidebarPanel(
       dateInput(
         "date", "From:",
-        value = min(df$date)
+        value = min(df$.date_var, na.rm = T)
       ),
       selectInput(
         "age_range",
@@ -34,9 +35,11 @@ ui <- fluidPage(
         choices = unique(df$daypart)
       ),
       pickerInput(
-        "hour", "Hour:",
-        choices = NULL,
-        selected = NULL,
+        "hours", "Hours:",
+        choices = sort(unique(df$hour)),
+        selected = sort(unique(df$hour)),
+        # choices = NULL,
+        # selected = NULL,
         multiple = T,
         options = pickerOptions(
           actionsBox = T,
@@ -52,49 +55,40 @@ ui <- fluidPage(
   )
 )
 
+# Server
 server <- function(input, output, session) {
-  
+
   observe({
     x <- df |> 
-      filter(
-        daypart == input$daypart,
-        age_range == input$age_range,
-        date >= input$date
-      )
+      filter(daypart == input$daypart)
     
     updatePickerInput(
       session,
-      "hour",
+      "hours",
       choices = sort(unique(x$hour)),
       selected = sort(unique(x$hour))
     )
   })
   
   df1 <- reactive({
-    df %>%
-      filter(
-        daypart == input$daypart,
-        age_range == input$age_range,
-        hour %in% input$hour
-      )
+    preprocess_data(df, input$daypart, input$hours, input$age_range, input$date)
   })
   
   output$putPlot <- renderPlotly({
     ggplotly(
-      ggplot(df1(), aes(x = date, y = PUTs)) +
+      ggplot(df1(), aes(x = .date_var, y = PUTs)) +
         geom_line() +
-        labs(title = "PUTs Over Time",
-             x = "Date", y = "PUTs")
+        labs(title = "PUTs Over Time", x = "", y = "")
     )
   })
   
   output$summaryTable <- renderTable({
     df1() |> 
       summarise(
-        mean_PUTs = mean(PUTs, na.rm = TRUE),
-        sd_PUTs = sd(PUTs, na.rm = TRUE),
-        min_PUTs = min(PUTs, na.rm = TRUE),
-        max_PUTs = max(PUTs, na.rm = TRUE)
+        mean_PUTs = mean(PUTs, na.rm = T),
+        sd_PUTs = sd(PUTs, na.rm = T),
+        min_PUTs = min(PUTs, na.rm = T),
+        max_PUTs = max(PUTs, na.rm = T)
       )
   })
   
