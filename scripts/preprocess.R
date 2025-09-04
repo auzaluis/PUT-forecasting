@@ -1,5 +1,7 @@
-library(arrow)
-library(tidyverse)
+pacman::p_load(
+  arrow,
+  tidyverse
+)
 
 load_data <- function(path) {
   read_parquet(path) |>
@@ -11,13 +13,13 @@ load_data <- function(path) {
     )
 }
 
-preprocess_data <- function(df, daypart, hours, age_range, date) {
-  df |>
+preprocess_data <- function(data, daypart_input, hour_input, age_input, date_input) {
+  data |>
     filter(
-      daypart == daypart,
-      hour %in% hours,
-      age_range == age_range,
-      .date_var >= date
+      daypart == daypart_input,
+      hour %in% hour_input,
+      age_range == age_input,
+      .date_var >= date_input
     ) |> 
     group_by(.date_var, dst_flag) |> 
     summarise(PUTs = mean(PUTs, na.rm = TRUE)) |>
