@@ -3,7 +3,8 @@ pacman::p_load(
   shiny,
   tidyverse,
   arrow,
-  plotly
+  plotly,
+  shinyWidgets
 )
 
 df <- read_parquet("data/raw_data.parquet") |> 
@@ -17,8 +18,19 @@ ui <- fluidPage(
   titlePanel("People Using TV Forecasting"),
   sidebarLayout(
     sidebarPanel(
-      selectInput("daypart", "Daypart:", choices = unique(df$daypart)),
       selectInput("age_range", "Age Range:", choices = unique(df$age_range)),
+      selectInput("daypart", "Daypart:", choices = unique(df$daypart)),
+      pickerInput(
+        "hour", "Hour:",
+        choices = sort(unique(df$hour)),
+        selected = 20,
+        multiple = T,
+        options = pickerOptions(
+          actionsBox = T,
+          liveSearch = T,
+          size = 8
+        )
+      ),
       dateRangeInput("date_range", "Date Range:",
                      start = min(df$date),
                      end = max(df$date))
@@ -49,7 +61,7 @@ server <- function(input, output, session) {
   })
   
   output$summaryTable <- renderTable({
-    filtered() %>%
+    filtered() |> 
       summarise(
         mean_PUTs = mean(PUTs, na.rm = TRUE),
         sd_PUTs = sd(PUTs, na.rm = TRUE),
