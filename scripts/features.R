@@ -44,6 +44,5 @@ add_features <- function(data, superbowl_input) {
       wday_holiday,
       superbowl,
       trend
-    ) |> 
-    as_tsibble(index = .date_var)
+    )
 }

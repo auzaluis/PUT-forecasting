@@ -10,6 +10,7 @@ pacman::p_load(
 source("scripts/preprocess.R")
 source("scripts/features.R")
 source("scripts/train_arimax.R")
+source("scripts/future_ts.R")
 
 # Load raw_data
 path <- "data/raw_data.parquet"
@@ -47,8 +48,15 @@ ui <- fluidPage(
         tabPanel(
           "Chart",
           plotlyOutput("forecastPlot")
-          # plotlyOutput("putPlot")
         ),
+        tabPanel(
+          "Long-term",
+          plotlyOutput("refit_forecastPlot")
+        ),
+        # tabPanel(
+        #   "jaja",
+        #   verbatimTextOutput("jaja")
+        # ),
         tabPanel(
           "Summary",
           verbatimTextOutput("printFit")
@@ -92,23 +100,38 @@ server <- function(input, output, session) {
     add_features(df1(), superbowl_dates)
   })
 
+  # Initial fitting
   arimax <- reactive({
     train_arimax(ts())
   })
   
-  fit_arimax <- reactive({
+  arimax_fit <- reactive({
     arimax()$fit
   })
   
-  model_tbl_arimax <- reactive({
-    modeltime_table(fit_arimax())
+  arimax_model_tbl <- reactive({
+    modeltime_table(arimax_fit())
   })
   
+  # Refitting
+  refit_arimax <- reactive({
+    train_arimax(ts(), fit_data = ts())
+  })
+  
+  refit_arimax_fit <- reactive({
+    refit_arimax()$fit
+  })
+  
+  refit_arimax_model_tbl <- reactive({
+    modeltime_table(refit_arimax_fit())
+  })
+  
+  # Plots
   output$forecastPlot <- renderPlotly({
     splits <- arimax()$splits
     ts_data <- ts()
     ggplotly(
-      model_tbl_arimax() |>
+      arimax_model_tbl() |>
         modeltime_calibrate(new_data = testing(splits)) |>
         modeltime_forecast(
           new_data = testing(splits),
@@ -121,29 +144,47 @@ server <- function(input, output, session) {
     )
   })
   
-  output$putPlot <- renderPlotly({
+  output$refit_forecastPlot <- renderPlotly({
+    splits <- arimax()$splits
+    ts_data <- ts()
+    future <- generate_future_ts(df1(), input$hours, superbowl_dates)
+    new_data <- bind_rows(testing(splits), future)
     ggplotly(
-      ggplot(df1(), aes(x = .date_var, y = PUTs)) +
-        geom_line() +
-        labs(title = "PUTs Over Time", x = "", y = "")
+      arimax_model_tbl() |>
+        modeltime_calibrate(new_data, quiet = F) |>
+        modeltime_forecast(
+          new_data = new_data,
+          actual_data = ts_data,
+          conf_interval = F
+        ) |>
+        plot_modeltime_forecast(.interactive = F) +
+        labs(title = NULL) +
+        theme(legend.position = "none")
     )
   })
   
+  # output$jaja <- renderPrint({
+  #   splits <- arimax()$splits
+  #   future <- generate_future_ts(df1(), input$hours, superbowl_dates)
+  #   new_data <- bind_rows(testing(splits), future)
+  #   future
+  # })
+  
   output$printFit <- renderPrint({
-    fit_arimax() |>
+    arimax_fit() |>
       extract_fit_parsnip()
   })
   
   output$printAccurary <- renderPrint({
     splits <- arimax()$splits
-    model_tbl_arimax() |>
+    arimax_model_tbl() |>
       modeltime_accuracy(testing(splits))
   })
   
   output$timeplot_resid <- renderPlotly({
     splits <- arimax()$splits
     ggplotly(
-      model_tbl_arimax() |>
+      arimax_model_tbl() |>
         modeltime_calibrate(new_data = testing(splits)) |>
         modeltime_residuals() |> 
         plot_modeltime_residuals(.type = "timeplot", .interactive = F) +
@@ -155,7 +196,7 @@ server <- function(input, output, session) {
   output$acf_resid <- renderPlotly({
     splits <- arimax()$splits
     ggplotly(
-      model_tbl_arimax() |>
+      arimax_model_tbl() |>
         modeltime_calibrate(new_data = testing(splits)) |>
         modeltime_residuals() |> 
         plot_modeltime_residuals(.type = "acf", .interactive = F) +
