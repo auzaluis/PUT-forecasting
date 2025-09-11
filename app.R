@@ -9,12 +9,38 @@ pacman::p_load(
 # Modules
 source("scripts/preprocess.R")
 source("scripts/features.R")
-source("scripts/train_arimax.R")
 source("scripts/future_ts.R")
 
 # Load raw_data
-path <- "data/raw_data.parquet"
-df <- load_data(path)
+models_path <- "data/models"
+model_files <- list.files(models_path, pattern = "^arimax_.*\\.rds$", full.names = TRUE)
+
+raw_data_path <- "data/raw_data.parquet"
+df <- load_data(raw_data_path)
+
+# clean_name function
+clean_name <- function(x) {
+  x |> 
+    str_replace_all("[^A-Za-z0-9]", "_") |> 
+    str_replace_all("_+", "_") |> 
+    str_replace_all("^_|_$", "")
+}
+
+# get_model_key function
+get_model_key <- function(daypart, age_range, hour, date) {
+  paste(
+    clean_name(as.character(daypart)),
+    clean_name(as.character(age_range)),
+    clean_name(as.character(hour)),
+    clean_name(as.character(date)),
+    sep = "_"
+  )
+}
+
+date_values <- as.Date(c("2022-01-01", "2023-01-01"))
+
+# Lookup for models
+model_lookup <- setNames(model_files, gsub("arimax_|\\.rds", "", basename(model_files)))
 
 # UI
 ui <- fluidPage(
@@ -22,9 +48,10 @@ ui <- fluidPage(
   titlePanel("People Using TV Forecasting"),
   sidebarLayout(
     sidebarPanel(
-      dateInput(
-        "date", "From:",
-        value = min(df$.date_var, na.rm = T)
+      pickerInput(
+        "date",
+        "From",
+        choices = unique(date_values)
       ),
       pickerInput(
         "age_range",
@@ -34,7 +61,7 @@ ui <- fluidPage(
       pickerInput(
         "daypart",
         "Daypart:",
-        choices = unique(df$daypart),
+        choices = unique(df$daypart)[2], # limit to total_day for simplicity
         selected = "total_day"
       ),
       pickerInput(
@@ -74,20 +101,6 @@ ui <- fluidPage(
 # Server
 server <- function(input, output, session) {
 
-  # observeEvent(input$daypart, {
-  #   x <- df |>
-  #     filter(daypart == input$daypart)
-  #   
-  #   hours_choices <- sort(unique(x$hour))
-  # 
-  #   updatePickerInput(
-  #     session,
-  #     "hours",
-  #     choices = sort(unique(x$hour)),
-  #     selected = sort(unique(x$hour))[1]
-  #   )
-  # })
-  
   df1 <- reactive({
     preprocess_data(df, input$daypart, input$hours, input$age_range, input$date)
   })
@@ -98,7 +111,14 @@ server <- function(input, output, session) {
 
   # Initial fitting
   arimax <- reactive({
-    train_arimax(ts())
+    key <- get_model_key(input$daypart, input$age_range, input$hours, input$date)
+    print(paste("Buscando modelo con clave:", key))
+    model_file <- model_lookup[[key]]
+    if (is.null(model_file) || !file.exists(model_file)) {
+      showNotification("No hay modelo pre-entrenado para esta combinación.", type = "error")
+      return(NULL)
+    }
+    readRDS(model_file)
   })
   
   arimax_fit <- reactive({
@@ -107,19 +127,6 @@ server <- function(input, output, session) {
   
   arimax_model_tbl <- reactive({
     modeltime_table(arimax_fit())
-  })
-  
-  # Refitting
-  refit_arimax <- reactive({
-    train_arimax(ts(), fit_data = ts())
-  })
-  
-  refit_arimax_fit <- reactive({
-    refit_arimax()$fit
-  })
-  
-  refit_arimax_model_tbl <- reactive({
-    modeltime_table(refit_arimax_fit())
   })
   
   # Plots
