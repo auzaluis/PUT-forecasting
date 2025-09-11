@@ -2,6 +2,7 @@ pacman::p_load(
   shiny,
   tidyverse,
   modeltime,
+  tidymodels,
   arrow,
   plotly,
   shinyWidgets

@@ -6616,7 +6616,349 @@
       "checksum": "0a870140d8d1df44558e65681f8563ae"
     },
     "app.R": {
-      "checksum": "4c36ead27dcd27217d0ff93850cea7db"
+      "checksum": "85a11934fbdb3e748160ec35e598a4d3"
+    },
+    "data/models/arimax_total_day_P18_0_2022_01_01.rds": {
+      "checksum": "994058f9aeb6008fa1ce5585f3190e3b"
+    },
+    "data/models/arimax_total_day_P18_0_2023_01_01.rds": {
+      "checksum": "5784619fd5b1a4a826f76659caaaef10"
+    },
+    "data/models/arimax_total_day_P18_1_2022_01_01.rds": {
+      "checksum": "9415131e1d50b7efff4160cbc855ea2a"
+    },
+    "data/models/arimax_total_day_P18_1_2023_01_01.rds": {
+      "checksum": "0e63f7375f8e8e8f3a28be2b8b929e06"
+    },
+    "data/models/arimax_total_day_P18_10_2022_01_01.rds": {
+      "checksum": "1fb34efd2c77bfd60319a92fa255dbd7"
+    },
+    "data/models/arimax_total_day_P18_10_2023_01_01.rds": {
+      "checksum": "e9e961e4210ccfb77e7257efede1c2d4"
+    },
+    "data/models/arimax_total_day_P18_11_2022_01_01.rds": {
+      "checksum": "53bb7c003b61dffb3ba326ff11d8895b"
+    },
+    "data/models/arimax_total_day_P18_11_2023_01_01.rds": {
+      "checksum": "e48031c2ca25b0e546253aba660287b2"
+    },
+    "data/models/arimax_total_day_P18_12_2022_01_01.rds": {
+      "checksum": "f89d7c752396486c6e59f3291dd16226"
+    },
+    "data/models/arimax_total_day_P18_12_2023_01_01.rds": {
+      "checksum": "2327b24847043b0e4495065aa7aa52a0"
+    },
+    "data/models/arimax_total_day_P18_13_2022_01_01.rds": {
+      "checksum": "f5906736b4506f36256edc408e211b6d"
+    },
+    "data/models/arimax_total_day_P18_13_2023_01_01.rds": {
+      "checksum": "9f1d7e942ed8568178f70e1cc22047fd"
+    },
+    "data/models/arimax_total_day_P18_14_2022_01_01.rds": {
+      "checksum": "1c899cc8f7e91294f746c31d29041737"
+    },
+    "data/models/arimax_total_day_P18_14_2023_01_01.rds": {
+      "checksum": "b6c3ea22ecfdce482daf4a42b5d724be"
+    },
+    "data/models/arimax_total_day_P18_15_2022_01_01.rds": {
+      "checksum": "9dc581b2a998c9866ffbe86767781187"
+    },
+    "data/models/arimax_total_day_P18_15_2023_01_01.rds": {
+      "checksum": "980c9f622773ad18eca4a0c88c03e365"
+    },
+    "data/models/arimax_total_day_P18_16_2022_01_01.rds": {
+      "checksum": "84398f80b4db805b6fd90b2b4d0fed22"
+    },
+    "data/models/arimax_total_day_P18_16_2023_01_01.rds": {
+      "checksum": "3bbf7c342d4ad949066b551512d85fe1"
+    },
+    "data/models/arimax_total_day_P18_17_2022_01_01.rds": {
+      "checksum": "50173f30cc1d45689ae48317555f1120"
+    },
+    "data/models/arimax_total_day_P18_17_2023_01_01.rds": {
+      "checksum": "b438155869a7bf993332d7d840f19915"
+    },
+    "data/models/arimax_total_day_P18_18_2022_01_01.rds": {
+      "checksum": "564916a1171ae66273e7db2e8f237602"
+    },
+    "data/models/arimax_total_day_P18_18_2023_01_01.rds": {
+      "checksum": "69506d56afc2cc367edb863c0b77d476"
+    },
+    "data/models/arimax_total_day_P18_19_2022_01_01.rds": {
+      "checksum": "23435ea499891e212f12b71ff02e3c89"
+    },
+    "data/models/arimax_total_day_P18_19_2023_01_01.rds": {
+      "checksum": "8d198467fa6fa44621bb24a95f4d4c8f"
+    },
+    "data/models/arimax_total_day_P18_20_2022_01_01.rds": {
+      "checksum": "681c4f65d52d23d6c3dcc18899267092"
+    },
+    "data/models/arimax_total_day_P18_20_2023_01_01.rds": {
+      "checksum": "b90b3df02efb1f7b3c9174f446bc0c10"
+    },
+    "data/models/arimax_total_day_P18_21_2022_01_01.rds": {
+      "checksum": "d36b3f4bf8f15e710a07943da87d5b22"
+    },
+    "data/models/arimax_total_day_P18_21_2023_01_01.rds": {
+      "checksum": "93f5ec1fb2f8e423de73cc8115bc8d45"
+    },
+    "data/models/arimax_total_day_P18_22_2022_01_01.rds": {
+      "checksum": "5c65f7efda7eb03687ef1347b35d1cee"
+    },
+    "data/models/arimax_total_day_P18_22_2023_01_01.rds": {
+      "checksum": "141027746502653633b56d150ead809e"
+    },
+    "data/models/arimax_total_day_P18_23_2022_01_01.rds": {
+      "checksum": "e89e97db8480feea90960754704bffff"
+    },
+    "data/models/arimax_total_day_P18_23_2023_01_01.rds": {
+      "checksum": "51984aacc2b0f1bbb3a747a6aab31a73"
+    },
+    "data/models/arimax_total_day_P18_49_0_2022_01_01.rds": {
+      "checksum": "a68687c7a0134dc0044d040da923af03"
+    },
+    "data/models/arimax_total_day_P18_49_0_2023_01_01.rds": {
+      "checksum": "f73dfa917592a61a956bb2ce7d43cb3c"
+    },
+    "data/models/arimax_total_day_P18_49_1_2022_01_01.rds": {
+      "checksum": "77962a2c876217da71f6774cc62d41a3"
+    },
+    "data/models/arimax_total_day_P18_49_1_2023_01_01.rds": {
+      "checksum": "e3f8a60c0ed961236bb45cbd1be8478d"
+    },
+    "data/models/arimax_total_day_P18_49_10_2022_01_01.rds": {
+      "checksum": "7b9f165b81dc5cb1bf53e303274b9002"
+    },
+    "data/models/arimax_total_day_P18_49_10_2023_01_01.rds": {
+      "checksum": "9632f8c8666598cd5a1fa66b38f7e36e"
+    },
+    "data/models/arimax_total_day_P18_49_11_2022_01_01.rds": {
+      "checksum": "d7e2527bf1a7fb1bc89a3903e5be54d1"
+    },
+    "data/models/arimax_total_day_P18_49_11_2023_01_01.rds": {
+      "checksum": "b9dd298c1640188e8a6374a720075c12"
+    },
+    "data/models/arimax_total_day_P18_49_12_2022_01_01.rds": {
+      "checksum": "7da2379861dcd4ce473238e44419b353"
+    },
+    "data/models/arimax_total_day_P18_49_12_2023_01_01.rds": {
+      "checksum": "c3f0ae294a1afa2f8f95bd9f2d1c799a"
+    },
+    "data/models/arimax_total_day_P18_49_13_2022_01_01.rds": {
+      "checksum": "6add408d92f7c4d033ee28a021ad69e7"
+    },
+    "data/models/arimax_total_day_P18_49_13_2023_01_01.rds": {
+      "checksum": "0b78b3daa5365d05eb894035bb8c11dc"
+    },
+    "data/models/arimax_total_day_P18_49_14_2022_01_01.rds": {
+      "checksum": "bb241d2db9271315e2167838f5d8a95e"
+    },
+    "data/models/arimax_total_day_P18_49_14_2023_01_01.rds": {
+      "checksum": "c7d4dd8414bf4086c3e66de78b65708a"
+    },
+    "data/models/arimax_total_day_P18_49_15_2022_01_01.rds": {
+      "checksum": "61a1603003ac680e50fd17950ca35df9"
+    },
+    "data/models/arimax_total_day_P18_49_15_2023_01_01.rds": {
+      "checksum": "015be284ea75ec4cf40bf1082e0cfb4b"
+    },
+    "data/models/arimax_total_day_P18_49_16_2022_01_01.rds": {
+      "checksum": "c9f0d01e855c2945a9419dec1c50f5d7"
+    },
+    "data/models/arimax_total_day_P18_49_16_2023_01_01.rds": {
+      "checksum": "14e806301b0459306abb7b9be6b79c77"
+    },
+    "data/models/arimax_total_day_P18_49_17_2022_01_01.rds": {
+      "checksum": "ce00a3e134f1f1339d62de1ae84b9f1f"
+    },
+    "data/models/arimax_total_day_P18_49_17_2023_01_01.rds": {
+      "checksum": "7efc224af71d2e246be2d6a26b9313d7"
+    },
+    "data/models/arimax_total_day_P18_49_18_2022_01_01.rds": {
+      "checksum": "731ef4ff06042e55ea5acf05e420c479"
+    },
+    "data/models/arimax_total_day_P18_49_18_2023_01_01.rds": {
+      "checksum": "53637bf6296f2f3cc2ab3164c0979c65"
+    },
+    "data/models/arimax_total_day_P18_49_19_2022_01_01.rds": {
+      "checksum": "6b1a2c09d4194db0620dc9906853551d"
+    },
+    "data/models/arimax_total_day_P18_49_19_2023_01_01.rds": {
+      "checksum": "1d64c3be20f90edb4ae116ae1c3935d2"
+    },
+    "data/models/arimax_total_day_P18_49_20_2022_01_01.rds": {
+      "checksum": "e5ce18e727c264ad434b57141b315341"
+    },
+    "data/models/arimax_total_day_P18_49_20_2023_01_01.rds": {
+      "checksum": "91e144c4af4386676e3eae989a9a3570"
+    },
+    "data/models/arimax_total_day_P18_49_21_2022_01_01.rds": {
+      "checksum": "dbe28e77bd1e5468b4e65558413162c5"
+    },
+    "data/models/arimax_total_day_P18_49_21_2023_01_01.rds": {
+      "checksum": "364281d5f284ade6814a62e189951564"
+    },
+    "data/models/arimax_total_day_P18_49_22_2022_01_01.rds": {
+      "checksum": "605dce868cb19855b7ad8bacabea58fa"
+    },
+    "data/models/arimax_total_day_P18_49_22_2023_01_01.rds": {
+      "checksum": "7f262cb4af5a5bdcf08cde39776cba8d"
+    },
+    "data/models/arimax_total_day_P18_49_23_2022_01_01.rds": {
+      "checksum": "6bacfbc9a3945335ed9e74ff02e02d56"
+    },
+    "data/models/arimax_total_day_P18_49_23_2023_01_01.rds": {
+      "checksum": "fbe096e9d47292b2daba60992438bffb"
+    },
+    "data/models/arimax_total_day_P18_49_7_2022_01_01.rds": {
+      "checksum": "c96ddb09b005ac65d1a54520536bf182"
+    },
+    "data/models/arimax_total_day_P18_49_7_2023_01_01.rds": {
+      "checksum": "d951d7480dcc5ef944a82fd0d2f4721a"
+    },
+    "data/models/arimax_total_day_P18_49_8_2022_01_01.rds": {
+      "checksum": "9771c73c4729ff37121b1e757cc6398e"
+    },
+    "data/models/arimax_total_day_P18_49_8_2023_01_01.rds": {
+      "checksum": "fee56c086634d9b0376c97e17732ea11"
+    },
+    "data/models/arimax_total_day_P18_49_9_2022_01_01.rds": {
+      "checksum": "0e950d2f86365811bbf143055099a3fb"
+    },
+    "data/models/arimax_total_day_P18_49_9_2023_01_01.rds": {
+      "checksum": "6e04f9d64b320e503ebbfff46d495d01"
+    },
+    "data/models/arimax_total_day_P18_7_2022_01_01.rds": {
+      "checksum": "bf4545d02db6cd8f070d1985c359278a"
+    },
+    "data/models/arimax_total_day_P18_7_2023_01_01.rds": {
+      "checksum": "2320cac3ac52dd7bd39360cbeba7b651"
+    },
+    "data/models/arimax_total_day_P18_8_2022_01_01.rds": {
+      "checksum": "5b4c73611e8b6029532d1faa6daebd5a"
+    },
+    "data/models/arimax_total_day_P18_8_2023_01_01.rds": {
+      "checksum": "449a7fd465799296cf222bd54c014e26"
+    },
+    "data/models/arimax_total_day_P18_9_2022_01_01.rds": {
+      "checksum": "a60e7dc98999d6863b5e191348c97e97"
+    },
+    "data/models/arimax_total_day_P18_9_2023_01_01.rds": {
+      "checksum": "fe880edffe993930f00d9d1cdeac4f1c"
+    },
+    "data/models/arimax_total_day_P2_0_2022_01_01.rds": {
+      "checksum": "7de6e4106de72b65a72fc0cb76a4e977"
+    },
+    "data/models/arimax_total_day_P2_0_2023_01_01.rds": {
+      "checksum": "a5b54befe386b9325cd7c2c6fdb6d930"
+    },
+    "data/models/arimax_total_day_P2_1_2022_01_01.rds": {
+      "checksum": "403648364e49fb40ef6deda2169b606c"
+    },
+    "data/models/arimax_total_day_P2_1_2023_01_01.rds": {
+      "checksum": "10c65417439ec14d293f4a8fc3eab41d"
+    },
+    "data/models/arimax_total_day_P2_10_2022_01_01.rds": {
+      "checksum": "efa7ac9c04496618e95ae070415dbfce"
+    },
+    "data/models/arimax_total_day_P2_10_2023_01_01.rds": {
+      "checksum": "d1fc76878f9224b9597e7f31b9ad9dd0"
+    },
+    "data/models/arimax_total_day_P2_11_2022_01_01.rds": {
+      "checksum": "acb7243d43db474d6548ed2b782173c6"
+    },
+    "data/models/arimax_total_day_P2_11_2023_01_01.rds": {
+      "checksum": "2291c84d9767691ac226dba5115cd83f"
+    },
+    "data/models/arimax_total_day_P2_12_2022_01_01.rds": {
+      "checksum": "0cb0698af2fcea1bc5b808e0c313eafd"
+    },
+    "data/models/arimax_total_day_P2_12_2023_01_01.rds": {
+      "checksum": "2be9a188ce44ce230b45ebc4a67bece4"
+    },
+    "data/models/arimax_total_day_P2_13_2022_01_01.rds": {
+      "checksum": "dcc2b8611796703f0cc1e0d1547d007d"
+    },
+    "data/models/arimax_total_day_P2_13_2023_01_01.rds": {
+      "checksum": "3a6441f3d76bd11c4822bcc8e6da842b"
+    },
+    "data/models/arimax_total_day_P2_14_2022_01_01.rds": {
+      "checksum": "1a63c663520f082c9baad53102433ae7"
+    },
+    "data/models/arimax_total_day_P2_14_2023_01_01.rds": {
+      "checksum": "f1a9194b8ef8f03f7f47ddbc26a1ee11"
+    },
+    "data/models/arimax_total_day_P2_15_2022_01_01.rds": {
+      "checksum": "dd5d104c5df042ff3e99051cc87a4b08"
+    },
+    "data/models/arimax_total_day_P2_15_2023_01_01.rds": {
+      "checksum": "6ad3715476fc8e8900267144ca4213c7"
+    },
+    "data/models/arimax_total_day_P2_16_2022_01_01.rds": {
+      "checksum": "df1c92a4d969c245fb0a5e2b7e6647c3"
+    },
+    "data/models/arimax_total_day_P2_16_2023_01_01.rds": {
+      "checksum": "92d8d91b7cbfb9d4d01f5c6b9539a549"
+    },
+    "data/models/arimax_total_day_P2_17_2022_01_01.rds": {
+      "checksum": "c5a64357e3188a2570a168399c53c624"
+    },
+    "data/models/arimax_total_day_P2_17_2023_01_01.rds": {
+      "checksum": "e87b5b10bc09605915ae51bae1cc4e8c"
+    },
+    "data/models/arimax_total_day_P2_18_2022_01_01.rds": {
+      "checksum": "19d3d3a3a4d6262876fa19823516065e"
+    },
+    "data/models/arimax_total_day_P2_18_2023_01_01.rds": {
+      "checksum": "479b4928e29b8e56367e7dafbaca55b3"
+    },
+    "data/models/arimax_total_day_P2_19_2022_01_01.rds": {
+      "checksum": "f4d0306da9af1f8094bffa1950b7b94a"
+    },
+    "data/models/arimax_total_day_P2_19_2023_01_01.rds": {
+      "checksum": "c3ada49d050882f0b46f21bdcf79a62f"
+    },
+    "data/models/arimax_total_day_P2_20_2022_01_01.rds": {
+      "checksum": "ccdaf4a9f6a18c5191249c3560f4b433"
+    },
+    "data/models/arimax_total_day_P2_20_2023_01_01.rds": {
+      "checksum": "cb5ed2a5fe30b59afeab719ba4e3812f"
+    },
+    "data/models/arimax_total_day_P2_21_2022_01_01.rds": {
+      "checksum": "546f83a3f79a6dba6ece735eff37f54f"
+    },
+    "data/models/arimax_total_day_P2_21_2023_01_01.rds": {
+      "checksum": "da6ae4753a8772ba1a45026cc4975501"
+    },
+    "data/models/arimax_total_day_P2_22_2022_01_01.rds": {
+      "checksum": "dc00005b8cf1324c13d339c43ddcc51e"
+    },
+    "data/models/arimax_total_day_P2_22_2023_01_01.rds": {
+      "checksum": "aa74541b926e29c233f57d1d1ffa4be4"
+    },
+    "data/models/arimax_total_day_P2_23_2022_01_01.rds": {
+      "checksum": "64b2ce45cb90ea20da5f3744306e39d9"
+    },
+    "data/models/arimax_total_day_P2_23_2023_01_01.rds": {
+      "checksum": "8e91582adc25157da3dd36ff8dcc9472"
+    },
+    "data/models/arimax_total_day_P2_7_2022_01_01.rds": {
+      "checksum": "78f048b5f2841d66c8afd32f093a7ebc"
+    },
+    "data/models/arimax_total_day_P2_7_2023_01_01.rds": {
+      "checksum": "d106d9a41b2b74687d3435c6026dbdfa"
+    },
+    "data/models/arimax_total_day_P2_8_2022_01_01.rds": {
+      "checksum": "522bc88b4ef326af14b002bb84a5f711"
+    },
+    "data/models/arimax_total_day_P2_8_2023_01_01.rds": {
+      "checksum": "7c190eeb1117c7a3609ff86f27f84247"
+    },
+    "data/models/arimax_total_day_P2_9_2022_01_01.rds": {
+      "checksum": "27b46d26a36eeacae7357112447ff3f9"
+    },
+    "data/models/arimax_total_day_P2_9_2023_01_01.rds": {
+      "checksum": "09f338699c9749e02c0905860001995f"
     },
     "data/raw_data.parquet": {
       "checksum": "1b92022b22baa1bc0e1ef962c18951e8"
@@ -6633,8 +6975,23 @@
     "scripts/extraction.R": {
       "checksum": "1b44c711e7ad6eb89adc55020adb61dd"
     },
+    "scripts/features.R": {
+      "checksum": "2e89cb5a1f4f62b04076f6850a719d23"
+    },
+    "scripts/future_ts.R": {
+      "checksum": "a8c3bf6310dac5d6e5943d42321078ff"
+    },
+    "scripts/preprocess.R": {
+      "checksum": "39f955af45f297c6ed54ca323d448a28"
+    },
+    "scripts/pretrain_models.R": {
+      "checksum": "12f7a261fcea2f7cf86d4b7064188e3a"
+    },
     "scripts/query_template.sql": {
       "checksum": "f00967bd23a229258a6e76dce4d3d7b1"
+    },
+    "scripts/train_arimax.R": {
+      "checksum": "1a3cf9fbbfde8dbfb0ac2586d5539438"
     }
   },
   "users": null
