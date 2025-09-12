@@ -84,7 +84,7 @@ ui <- fluidPage(
           "All models performance", br(),
           tabsetPanel(
             tabPanel("Metrics Table", DT::dataTableOutput("mape_table")),
-            tabPanel("Metric Distribution", 
+            tabPanel("Metrics Distribution", 
                      br(),
                      selectInput(
                        "metric_hist_input",
@@ -99,7 +99,7 @@ ui <- fluidPage(
                      ),
                      plotlyOutput("metric_hist")
             ),
-            tabPanel("MAPE Facet", 
+            tabPanel("Metrics Facet", 
                      br(),
                      selectInput(
                        "metric_facet_input",
