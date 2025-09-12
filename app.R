@@ -6,7 +6,8 @@ pacman::p_load(
   arrow,
   plotly,
   shinyWidgets,
-  DT
+  DT,
+  lmtest
 )
 
 # Modules
@@ -76,15 +77,43 @@ ui <- fluidPage(
           "Residuals", br(),
           tabsetPanel(
             tabPanel("Time Plot", plotlyOutput("timeplot_resid")),
-            tabPanel("ACF", plotlyOutput("acf_resid"))
+            tabPanel("ACF", plotOutput("acf_resid"))
           )
         ),
         tabPanel(
           "All models performance", br(),
           tabsetPanel(
-            tabPanel("MAPE Table", DT::dataTableOutput("mape_table")),
-            tabPanel("MAPE Distribution", br(), plotlyOutput("mape_hist")),
-            tabPanel("MAPE Facet", br(), plotlyOutput("mape_facet"))
+            tabPanel("Metrics Table", DT::dataTableOutput("mape_table")),
+            tabPanel("Metric Distribution", 
+                     br(),
+                     selectInput(
+                       "metric_hist_input",
+                       "Select metric:",
+                       choices = c(
+                         "MAPE" = "mape",
+                         "Normalidad (Shapiro p-value)" = "norm_pvalue",
+                         "Homocedasticidad (BP p-value)" = "homo_pvalue",
+                         "Autocorrelación (Ljung-Box p-value)" = "ac_pvalue"
+                       ),
+                       selected = "mape"
+                     ),
+                     plotlyOutput("metric_hist")
+            ),
+            tabPanel("MAPE Facet", 
+                     br(),
+                     selectInput(
+                       "metric_facet_input",
+                       "Select metric:",
+                       choices = c(
+                         "MAPE" = "mape",
+                         "Normalidad (Shapiro p-value)" = "norm_pvalue",
+                         "Homocedasticidad (BP p-value)" = "homo_pvalue",
+                         "Autocorrelación (Ljung-Box p-value)" = "ac_pvalue"
+                       ),
+                       selected = "mape"
+                     ),
+                     plotlyOutput("metric_facet")
+            )
           )
         )
       )
@@ -199,34 +228,62 @@ server <- function(input, output, session) {
     )
   })
   
-  output$acf_resid <- renderPlotly({
+  output$acf_resid <- renderPlot({
     splits <- arimax()$splits
-    ggplotly(
+    
+    resid <- 
       arimax_model_tbl() |>
-        modeltime_calibrate(new_data = testing(splits)) |>
-        modeltime_residuals() |> 
-        plot_modeltime_residuals(.type = "acf", .interactive = F) +
-        labs(title = NULL) +
-        theme(legend.position = "none")
-    )
+      modeltime_calibrate(new_data = testing(splits)) |>
+      modeltime_residuals() |> pull()
+    
+    plot(acf(resid, lag = 7, main = NULL))
   })
   
-  # MAPE for all models
-  all_mapes <- reactive({
+  # Metrics for all models
+  all_metrics <- reactive({
     map_dfr(model_files, function(f) {
+      
       fit <- readRDS(f)
-      preds <- modeltime_table(fit$fit) |>
-        modeltime_calibrate(testing(fit$splits), quiet = T)
-      acc <- modeltime_accuracy(preds)
-      mape_val <- round(acc$mape, 1)
+      calibrated <- 
+        modeltime_table(fit$fit) |>
+        modeltime_calibrate(testing(fit$splits), quiet = TRUE)
+      
+      acc <- modeltime_accuracy(calibrated)
+      mape_val <- acc$mape |> round(1)
+      
+      resids <- modeltime_residuals(calibrated)$.residuals
+      preds <- modeltime_residuals(calibrated)$.prediction
+      
+      norm_pvalue <-
+        tryCatch(shapiro.test(resids)$p.value, error = function(e) NA) |>
+        round(2)
+      
+      homo_pvalue <-
+        tryCatch({
+          lm_mod <- lm(resids^2 ~ seq_along(resids))
+          lmtest::bptest(lm_mod)$p.value |> round(2)
+        }, error = function(e) NA)
+      
+      ac_pvalue <-
+        tryCatch(
+          Box.test(x = resids, lag = 7, type = "Ljung-Box")$p.value,
+          error = function(e) NA
+        ) |>
+        round(2)
       
       parse_model_filename(basename(f)) |>
-        mutate(mape = mape_val)
+        mutate(
+          mape = mape_val,
+          norm_pvalue = norm_pvalue,
+          homo_pvalue = homo_pvalue,
+          ac_pvalue = ac_pvalue
+        )
+      
     })
   })
   
   output$mape_table <- DT::renderDataTable({
-    all_mapes()
+    all_metrics()
   }, options = list(
     pageLength = 10,
     orderClasses = T,
@@ -234,26 +291,38 @@ server <- function(input, output, session) {
     columnDefs = list(list(className = 'dt-left', targets = "_all"))
   ), rownames = F)
   
-  output$mape_hist <- renderPlotly({
+  output$metric_hist <- renderPlotly({
+    metric <- input$metric_hist_input
+    df <- all_metrics()
     ggplotly(
-      ggplot(all_mapes(), aes(x = mape)) +
+      ggplot(df, aes(x = .data[[metric]])) +
         geom_histogram(fill = "#0073C2FF", color = "white", bins = 20) +
-        labs(x = "MAPE", y = "Frecuencia") +
+        labs(
+          x = names(which(c(
+            mape = "MAPE",
+            norm_pvalue = "Normalidad (Shapiro p-value)",
+            homo_pvalue = "Homocedasticidad (BP p-value)",
+            ac_pvalue = "Autocorrelación (Ljung-Box p-value)"
+          ) == metric)),
+          y = "Frecuencia"
+        ) +
         theme_minimal()
     )
   })
   
-  output$mape_facet <- renderPlotly({
+  output$metric_facet <- renderPlotly({
+    metric <- input$metric_facet_input
+    df <- all_metrics()
     ggplotly(
       ggplot(
-        all_mapes(),
+        all_metrics(),
         aes(
           x = hour,
-          y = mape,
+          y = .data[[metric]],
           color = age_range,
           group = age_range,
           text = paste(
-            "MAPE:", mape,
+            toupper(metric), ": ", .data[[metric]],
             "<br>Age Range:", age_range,
             "<br>Date:", date,
             "<br>Hour:", hour
@@ -265,7 +334,12 @@ server <- function(input, output, session) {
         facet_wrap(~date) +
         labs(
           x = "Hour",
-          y = "MAPE",
+          y = names(which(c(
+            mape = "MAPE",
+            norm_pvalue = "Normalidad (Shapiro p-value)",
+            homo_pvalue = "Homocedasticidad (BP p-value)",
+            ac_pvalue = "Autocorrelación (Ljung-Box p-value)"
+          ) == metric)),
           color = "Age Range"
         ) +
         theme_minimal(),
