@@ -5,6 +5,7 @@ pacman::p_load(
 source("scripts/preprocess.R")
 source("scripts/features.R")
 source("scripts/train_arimax.R")
+source("scripts/utils.R")
 
 # Load raw_data
 models_path <- "data/models"
@@ -12,13 +13,6 @@ raw_data_path <- "data/raw_data.parquet"
 df <- load_data(raw_data_path)
 
 # clean_name function
-clean_name <- function(x) {
-  x |> 
-    str_replace_all("[^A-Za-z0-9]", "_") |> 
-    str_replace_all("_+", "_") |> 
-    str_replace_all("^_|_$", "")
-}
-
 date_values <- as.Date(c("2022-01-01", "2023-01-01"))
 
 df_models <- df |> 

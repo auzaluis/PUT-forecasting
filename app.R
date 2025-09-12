@@ -5,13 +5,15 @@ pacman::p_load(
   tidymodels,
   arrow,
   plotly,
-  shinyWidgets
+  shinyWidgets,
+  DT
 )
 
 # Modules
 source("scripts/preprocess.R")
 source("scripts/features.R")
 source("scripts/future_ts.R")
+source("scripts/utils.R")
 
 # Load raw_data
 models_path <- "data/models"
@@ -20,29 +22,11 @@ model_files <- list.files(models_path, pattern = "^arimax_.*\\.rds$", full.names
 raw_data_path <- "data/raw_data.parquet"
 df <- load_data(raw_data_path)
 
-# clean_name function
-clean_name <- function(x) {
-  x |> 
-    str_replace_all("[^A-Za-z0-9]", "_") |> 
-    str_replace_all("_+", "_") |> 
-    str_replace_all("^_|_$", "")
-}
-
-# get_model_key function
-get_model_key <- function(daypart, age_range, hour, date) {
-  paste(
-    clean_name(as.character(daypart)),
-    clean_name(as.character(age_range)),
-    clean_name(as.character(hour)),
-    clean_name(as.character(date)),
-    sep = "_"
-  )
-}
-
-date_values <- as.Date(c("2022-01-01", "2023-01-01"))
-
 # Lookup for models
 model_lookup <- setNames(model_files, gsub("arimax_|\\.rds", "", basename(model_files)))
+
+# date input values
+date_values <- as.Date(c("2022-01-01", "2023-01-01"))
 
 # UI
 ui <- fluidPage(
@@ -51,20 +35,18 @@ ui <- fluidPage(
   sidebarLayout(
     sidebarPanel(
       pickerInput(
-        "date",
-        "From",
-        choices = unique(date_values)
+        "date", "From",
+        choices = unique(date_values),
+        selected = unique(date_values)[2]
       ),
       pickerInput(
-        "age_range",
-        "Age Range:",
+        "age_range", "Age Range:",
         choices = unique(df$age_range)
       ),
       pickerInput(
-        "daypart",
-        "Daypart:",
+        "daypart", "Daypart:",
         choices = unique(df$daypart)[2], # limit to total_day for simplicity
-        selected = "total_day"
+        selected = unique(df$daypart)[2]
       ),
       pickerInput(
         "hours", "Hours:",
@@ -91,9 +73,19 @@ ui <- fluidPage(
           verbatimTextOutput("printAccurary")
         ),
         tabPanel(
-          "Residuals",
-          fluidRow(column(12, plotlyOutput("timeplot_resid"))),
-          fluidRow(column(12, plotlyOutput("acf_resid")))
+          "Residuals", br(),
+          tabsetPanel(
+            tabPanel("Time Plot", plotlyOutput("timeplot_resid")),
+            tabPanel("ACF", plotlyOutput("acf_resid"))
+          )
+        ),
+        tabPanel(
+          "All models performance", br(),
+          tabsetPanel(
+            tabPanel("MAPE Table", DT::dataTableOutput("mape_table")),
+            tabPanel("MAPE Distribution", br(), plotlyOutput("mape_hist")),
+            tabPanel("MAPE Facet", br(), plotlyOutput("mape_facet"))
+          )
         )
       )
     )
@@ -144,9 +136,17 @@ server <- function(input, output, session) {
           conf_interval = F
         ) |>
         plot_modeltime_forecast(.interactive = F) +
-        labs(title = NULL) +
-        theme(legend.position = "none")
-    )
+        labs(title = NULL)
+    ) |> 
+      layout(
+        legend = list(
+          orientation = "h",
+          x = 0,
+          y = 1.1,
+          xanchor = "left",
+          yanchor = "top"
+        )
+      )
   })
   
   output$refit_forecastPlot <- renderPlotly({
@@ -163,9 +163,17 @@ server <- function(input, output, session) {
           conf_interval = F
         ) |>
         plot_modeltime_forecast(.interactive = F) +
-        labs(title = NULL) +
-        theme(legend.position = "none")
-    )
+        labs(title = NULL)
+    ) |> 
+      layout(
+        legend = list(
+          orientation = "h",
+          x = 0,
+          y = 1.1,
+          xanchor = "left",
+          yanchor = "top"
+        )
+      )
   })
   
   output$printFit <- renderPrint({
@@ -201,6 +209,77 @@ server <- function(input, output, session) {
         labs(title = NULL) +
         theme(legend.position = "none")
     )
+  })
+  
+  # MAPE for all models
+  all_mapes <- reactive({
+    map_dfr(model_files, function(f) {
+      fit <- readRDS(f)
+      preds <- modeltime_table(fit$fit) |>
+        modeltime_calibrate(testing(fit$splits), quiet = T)
+      acc <- modeltime_accuracy(preds)
+      mape_val <- round(acc$mape, 1)
+      
+      parse_model_filename(basename(f)) |>
+        mutate(mape = mape_val)
+    })
+  })
+  
+  output$mape_table <- DT::renderDataTable({
+    all_mapes()
+  }, options = list(
+    pageLength = 10,
+    orderClasses = T,
+    dom = 'tp',
+    columnDefs = list(list(className = 'dt-left', targets = "_all"))
+  ), rownames = F)
+  
+  output$mape_hist <- renderPlotly({
+    ggplotly(
+      ggplot(all_mapes(), aes(x = mape)) +
+        geom_histogram(fill = "#0073C2FF", color = "white", bins = 20) +
+        labs(x = "MAPE", y = "Frecuencia") +
+        theme_minimal()
+    )
+  })
+  
+  output$mape_facet <- renderPlotly({
+    ggplotly(
+      ggplot(
+        all_mapes(),
+        aes(
+          x = hour,
+          y = mape,
+          color = age_range,
+          group = age_range,
+          text = paste(
+            "MAPE:", mape,
+            "<br>Age Range:", age_range,
+            "<br>Date:", date,
+            "<br>Hour:", hour
+          )
+        )
+      ) +
+        geom_point(size = 3) +
+        geom_line() +
+        facet_wrap(~date) +
+        labs(
+          x = "Hour",
+          y = "MAPE",
+          color = "Age Range"
+        ) +
+        theme_minimal(),
+      tooltip = "text"
+    ) |>
+      layout(
+        legend = list(
+          orientation = "h",
+          x = 0,
+          y = 1.25,
+          xanchor = "left",
+          yanchor = "top"
+        )
+      )
   })
   
 }
