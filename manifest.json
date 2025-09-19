@@ -6643,7 +6643,7 @@
       "checksum": "0a870140d8d1df44558e65681f8563ae"
     },
     "app.R": {
-      "checksum": "bcc11a57426ba9b4cc98310fdf1dd120"
+      "checksum": "3c8f97e1e9c641a01db5ad23bfb0d99e"
     },
     "data/models/arimax_total_day_P18_0_2022_01_01.rds": {
       "checksum": "994058f9aeb6008fa1ce5585f3190e3b"
@@ -6999,6 +6999,9 @@
     "EDA/exploring_models.qmd": {
       "checksum": "b5b79827d0f412cf14f9ac41d34e025f"
     },
+    "requirements.txt": {
+      "checksum": "a0ede965753458588114971b6205a1d6"
+    },
     "scripts/extraction.R": {
       "checksum": "1b44c711e7ad6eb89adc55020adb61dd"
     },
@@ -7012,16 +7015,16 @@
       "checksum": "39f955af45f297c6ed54ca323d448a28"
     },
     "scripts/pretrain_models.R": {
-      "checksum": "dbebca88ba056728e6f4e1440b141294"
+      "checksum": "b1e47e444361be5e8b6668dfa84326ae"
     },
     "scripts/query_template.sql": {
       "checksum": "f00967bd23a229258a6e76dce4d3d7b1"
     },
-    "scripts/train_arimax.R": {
-      "checksum": "1a3cf9fbbfde8dbfb0ac2586d5539438"
-    },
     "scripts/utils.R": {
       "checksum": "eee943b36bc450ae46120ee3276c14c4"
+    },
+    "scripts/workflows.R": {
+      "checksum": "1a3cf9fbbfde8dbfb0ac2586d5539438"
     }
   },
   "users": null

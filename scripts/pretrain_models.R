@@ -2,9 +2,10 @@ pacman::p_load(
   tidyverse,
   arrow
 )
+
 source("scripts/preprocess.R")
 source("scripts/features.R")
-source("scripts/train_arimax.R")
+source("scripts/workflows.R")
 source("scripts/utils.R")
 
 # Load raw_data

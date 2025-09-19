@@ -1,0 +1,11 @@
+shiny
+tidyverse
+modeltime
+tidymodels
+arrow
+plotly
+shinyWidgets
+DT
+lmtest
+timetk
+tsibble

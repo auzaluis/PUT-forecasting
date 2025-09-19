@@ -46,8 +46,8 @@ ui <- fluidPage(
       ),
       pickerInput(
         "daypart", "Daypart:",
-        choices = unique(df$daypart)[2], # limit to total_day for simplicity
-        selected = unique(df$daypart)[2]
+        choices = unique(df$daypart)[1], # limit to total_day for simplicity
+        selected = unique(df$daypart)[1]
       ),
       pickerInput(
         "hours", "Hours:",
