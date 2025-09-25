@@ -27,3 +27,38 @@ train_arimax <- function(ts_data, split_prop = 0.9, fit_data = NULL) {
     workflow = wf_arimax
   )
 }
+
+### I mi cambio MO 23/09
+workflow_glmnet <- function(ts_data) {
+  recipe_glmnet <- recipe(PUTs ~., data = training(splits)) |>
+    update_role(.date_var, new_role = "index")|>
+    step_dummy(all_nominal_predictors()) |> 
+    step_normalize(all_numeric_predictors())|> 
+    step_naomit(all_predictors())
+  
+  modelo <- linear_reg(
+    penalty = 0.0001,   
+    mixture = 0    # 1 = LASSO, 0 = Ridge
+  ) %>%
+    set_engine("glmnet") %>%
+    set_mode("regression")
+  
+  workflow() |>
+    add_recipe(recipe_glmnet) |>
+    add_model(modelo)
+}
+
+train_glmnet <- function(ts_data, split_prop = 0.9, fit_data = NULL) {
+  splits <- initial_time_split(ts_data, prop = split_prop)
+  wf_glmnet <- workflow_glmnet(training(splits))
+  if (is.null(fit_data)) {
+    fit_data <- training(splits)
+  }
+  fit_glmnet <- wf_glmnet |> fit(data = fit_data)
+  list(
+    fit = fit_glmnet,
+    splits = splits,
+    workflow = wf_glmnet
+  )
+}
+### F mi cambio MO 23/09
