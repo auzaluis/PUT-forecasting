@@ -7,7 +7,8 @@ pacman::p_load(
   plotly,
   shinyWidgets,
   DT,
-  lmtest
+  lmtest,
+  timetk
 )
 
 # Modules
@@ -18,13 +19,19 @@ source("scripts/utils.R")
 
 # Load raw_data
 models_path <- "data/models"
-model_files <- list.files(models_path, pattern = "^arimax_.*\\.rds$", full.names = TRUE)
+#mo092525 I
+model_files_arimax <- list.files(models_path, pattern = "(^arimax_.*)\\.rds$", full.names = TRUE)
+model_files_glmnet <- list.files(models_path, pattern = "(^glmnet_.*)\\.rds$", full.names = TRUE)
+#mo092525 F
 
 raw_data_path <- "data/raw_data.parquet"
 df <- load_data(raw_data_path)
 
 # Lookup for models
-model_lookup <- setNames(model_files, gsub("arimax_|\\.rds", "", basename(model_files)))
+#mo09225 I
+model_lookup_arimax <- setNames(model_files_arimax, gsub("arimax_|\\.rds", "", basename(model_files_arimax)))
+model_lookup_glmnet <- setNames(model_files_glmnet, gsub("glmnet_|\\.rds", "", basename(model_files_glmnet)))
+#mo092525 F
 
 # date input values
 date_values <- as.Date(c("2022-01-01", "2023-01-01"))
@@ -91,6 +98,10 @@ ui <- fluidPage(
                        "Select metric:",
                        choices = c(
                          "MAPE" = "mape",
+                         "RMSE" = "rmse",#mo 092525
+                         "MSE" = "mse",#mo 092525
+                         "MAE" = "mae",#mo 092525
+                         "R²" = "rsq",#mo 092525
                          "Normalidad (Shapiro p-value)" = "norm_pvalue",
                          "Homocedasticidad (BP p-value)" = "homo_pvalue",
                          "Autocorrelación (Ljung-Box p-value)" = "ac_pvalue"
@@ -106,6 +117,10 @@ ui <- fluidPage(
                        "Select metric:",
                        choices = c(
                          "MAPE" = "mape",
+                         "RMSE" = "rmse",#mo 092525
+                         "MSE" = "mse",#mo 092525
+                         "MAE" = "mae",#mo 092525
+                         "R²" = "rsq",#mo 092525
                          "Normalidad (Shapiro p-value)" = "norm_pvalue",
                          "Homocedasticidad (BP p-value)" = "homo_pvalue",
                          "Autocorrelación (Ljung-Box p-value)" = "ac_pvalue"
@@ -136,21 +151,38 @@ server <- function(input, output, session) {
   arimax <- reactive({
     key <- get_model_key(input$daypart, input$age_range, input$hours, input$date)
     print(paste("Buscando modelo con clave:", key))
-    model_file <- model_lookup[[key]]
+    model_file <- model_lookup_arimax[[key]]
     if (is.null(model_file) || !file.exists(model_file)) {
       showNotification("No hay modelo pre-entrenado para esta combinación.", type = "error")
       return(NULL)
     }
     readRDS(model_file)
   })
-  
+  #mo092525 I glmnet fitting
+  glmnet <- reactive({
+    key <- get_model_key(input$daypart, input$age_range, input$hours, input$date)
+    print(paste("Buscando modelo con clave:", key))
+    model_file <- model_lookup_glmnet[[key]]
+    if (is.null(model_file) || !file.exists(model_file)) {
+      showNotification("No hay modelo pre-entrenado para esta combinación.", type = "error")
+      return(NULL)
+    }
+    readRDS(model_file)
+  })
+  #mo0925 F
   arimax_fit <- reactive({
     arimax()$fit
   })
+  ##mo 0925 I
+  glmnet_fit <- reactive({
+    glmnet()$fit
+  })
   
   arimax_model_tbl <- reactive({
-    modeltime_table(arimax_fit())
+    modeltime_table(arimax_fit(),glmnet_fit())
   })
+  ##mo 0925 F
+
   
   # Plots
   output$forecastPlot <- renderPlotly({
@@ -205,10 +237,16 @@ server <- function(input, output, session) {
       )
   })
   
+  #mo0925 I
   output$printFit <- renderPrint({
-    arimax_fit() |>
-      extract_fit_parsnip()
+    cat("🔹 Modelo ARIMAX:\n")
+    print(arimax_fit() |> extract_fit_parsnip())
+    
+    cat("\n\n🔹 Modelo GLMNET:\n")
+    print(glmnet_fit() |> extract_fit_parsnip()|> 
+            tidy() |> print(n=24))
   })
+  #mo0925 F
   
   output$printAccurary <- renderPrint({
     splits <- arimax()$splits
@@ -228,16 +266,29 @@ server <- function(input, output, session) {
     )
   })
   
+  #mo 0925 I acf
   output$acf_resid <- renderPlot({
-    splits <- arimax()$splits
+    splits <- arimax()$splits 
+    calibrated_tbl <- arimax_model_tbl() |>
+      modeltime_calibrate(new_data = testing(splits))
     
-    resid <- 
-      arimax_model_tbl() |>
-      modeltime_calibrate(new_data = testing(splits)) |>
-      modeltime_residuals() |> pull()
+    residuals_tbl <- modeltime_residuals(calibrated_tbl)
     
-    plot(acf(resid, lag = 7, main = NULL))
+    model_ids <- unique(residuals_tbl$.model_id)
+    model_descs <- unique(residuals_tbl$.model_desc)
+    
+    par(mfrow = c(1,length(model_ids)))  
+    
+    # Graficar ACF
+    for (i in seq_along(model_ids)) {
+      resids <- residuals_tbl |>
+        filter(.model_id == model_ids[i]) |>
+        pull(.residuals)
+      
+      acf(resids, main = paste("ACF -", model_descs[i]))
+    }
   })
+  #mo 0925 F
   
   # Metrics for all models
   all_metrics <- reactive({
@@ -250,6 +301,10 @@ server <- function(input, output, session) {
       
       acc <- modeltime_accuracy(calibrated)
       mape_val <- acc$mape |> round(1)
+      rmse_val <- acc$rmse |> round(1)#mo 092525
+      mse_val  <- (acc$rmse)^2 |> round(1)#mo 092525
+      rsq_val  <- acc$rsq  |> round(2)#mo 092525
+      mae_val  <- acc$mae  |> round(1)#mo 092525
       
       resids <- modeltime_residuals(calibrated)$.residuals
       preds <- modeltime_residuals(calibrated)$.prediction
@@ -274,6 +329,10 @@ server <- function(input, output, session) {
       parse_model_filename(basename(f)) |>
         mutate(
           mape = mape_val,
+          rmse = rmse_val,#mo 092525
+          mse = mse_val,#mo 092525
+          rsq = rsq_val,#mo 092525
+          mae = mae_val,#mo 092525
           norm_pvalue = norm_pvalue,
           homo_pvalue = homo_pvalue,
           ac_pvalue = ac_pvalue
@@ -300,12 +359,16 @@ server <- function(input, output, session) {
         labs(
           x = names(which(c(
             mape = "MAPE",
+            rmse = "RMSE",#mo 092525
+            mse = "MSE",#mo 092525
+            mae = "MAE",#mo 092525
+            rsq = "R²",#mo 092525
             norm_pvalue = "Normalidad (Shapiro p-value)",
             homo_pvalue = "Homocedasticidad (BP p-value)",
             ac_pvalue = "Autocorrelación (Ljung-Box p-value)"
           ) == metric)),
           y = "Frecuencia"
-        ) +
+        ) +facet_wrap(model~date)+
         theme_minimal()
     )
   })
@@ -331,11 +394,15 @@ server <- function(input, output, session) {
       ) +
         geom_point(size = 3) +
         geom_line() +
-        facet_wrap(~date) +
+        facet_wrap(model~date) +
         labs(
           x = "Hour",
           y = names(which(c(
             mape = "MAPE",
+            rmse = "RMSE",#mo 092525
+            mse = "RMSE",#mo 092525
+            mae = "MAE",#mo 092525
+            rsq = "R²",#mo 092525
             norm_pvalue = "Normalidad (Shapiro p-value)",
             homo_pvalue = "Homocedasticidad (BP p-value)",
             ac_pvalue = "Autocorrelación (Ljung-Box p-value)"

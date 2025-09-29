@@ -28,10 +28,11 @@ train_arimax <- function(ts_data, split_prop = 0.9, fit_data = NULL) {
   )
 }
 
-### I mi cambio MO 23/09
+#mo092325 I
 workflow_glmnet <- function(ts_data) {
   recipe_glmnet <- recipe(PUTs ~., data = training(splits)) |>
     update_role(.date_var, new_role = "index")|>
+    step_zv(all_predictors()) |> 
     step_dummy(all_nominal_predictors()) |> 
     step_normalize(all_numeric_predictors())|> 
     step_naomit(all_predictors())
@@ -61,4 +62,4 @@ train_glmnet <- function(ts_data, split_prop = 0.9, fit_data = NULL) {
     workflow = wf_glmnet
   )
 }
-### F mi cambio MO 23/09
+#mo092325 F
