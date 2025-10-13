@@ -1709,7 +1709,12 @@
         "Maintainer": "Folashade Daniel <fdaniel@microsoft.com>",
         "Repository": "CRAN",
         "Date/Publication": "2022-02-07 12:50:02 UTC",
-        "Built": "R 4.5.1; ; 2025-07-28 01:34:01 UTC; windows"
+        "Built": "R 4.5.1; ; 2025-09-11 12:02:26 UTC; windows",
+        "RemoteType": "standard",
+        "RemotePkgRef": "doParallel",
+        "RemoteRef": "doParallel",
+        "RemoteRepos": "https://cran.rstudio.com",
+        "RemoteSha": "1.0.17"
       }
     },
     "dotenv": {
@@ -2410,6 +2415,37 @@
         "Repository": "CRAN",
         "Date/Publication": "2025-04-09 09:40:10 UTC",
         "Built": "R 4.5.1; ; 2025-07-26 02:02:14 UTC; windows"
+      }
+    },
+    "glmnet": {
+      "Source": "CRAN",
+      "Repository": "https://cran.rstudio.com",
+      "description": {
+        "Package": "glmnet",
+        "Type": "Package",
+        "Title": "Lasso and Elastic-Net Regularized Generalized Linear Models",
+        "Version": "4.1-10",
+        "Date": "2025-07-15",
+        "Authors@R": "c(person(\"Jerome\", \"Friedman\", role=c(\"aut\")),\n\t     person(\"Trevor\", \"Hastie\", role=c(\"aut\", \"cre\"), email = \"hastie@stanford.edu\"),\n\t     person(\"Rob\", \"Tibshirani\", role=c(\"aut\")),\n\t     person(\"Balasubramanian\", \"Narasimhan\", role=c(\"aut\")),\n\t     person(\"Kenneth\",\"Tay\",role=c(\"aut\")),\n\t     person(\"Noah\", \"Simon\", role=c(\"aut\")),\n\t     person(\"Junyang\", \"Qian\", role=c(\"ctb\")),\n\t     person(\"James\", \"Yang\", role=c(\"aut\")))",
+        "Depends": "R (>= 3.6.0), Matrix (>= 1.0-6)",
+        "Imports": "methods, utils, foreach, shape, survival, Rcpp",
+        "Suggests": "knitr, lars, testthat, xfun, rmarkdown",
+        "SystemRequirements": "C++17",
+        "Description": "Extremely efficient procedures for fitting the entire lasso or elastic-net regularization path for linear regression, logistic and multinomial regression models, Poisson regression, Cox model,  multiple-response Gaussian, and the grouped multinomial regression; see <doi:10.18637/jss.v033.i01> and <doi:10.18637/jss.v039.i05>. There are two new and important additions. The family argument can be a GLM family object, which opens the door to any programmed family (<doi:10.18637/jss.v106.i01>). This comes with a modest computational cost, so when the built-in families suffice, they should be used instead.  The other novelty is the relax option, which refits each of the active sets in the path unpenalized. The algorithm uses cyclical coordinate descent in a path-wise fashion, as described in the papers cited.",
+        "License": "GPL-2",
+        "VignetteBuilder": "knitr",
+        "Encoding": "UTF-8",
+        "URL": "https://glmnet.stanford.edu",
+        "RoxygenNote": "7.3.2",
+        "LinkingTo": "RcppEigen, Rcpp",
+        "NeedsCompilation": "yes",
+        "Packaged": "2025-07-16 00:40:18 UTC; hastie",
+        "Author": "Jerome Friedman [aut],\n  Trevor Hastie [aut, cre],\n  Rob Tibshirani [aut],\n  Balasubramanian Narasimhan [aut],\n  Kenneth Tay [aut],\n  Noah Simon [aut],\n  Junyang Qian [ctb],\n  James Yang [aut]",
+        "Maintainer": "Trevor Hastie <hastie@stanford.edu>",
+        "Repository": "CRAN",
+        "Date/Publication": "2025-07-17 04:50:02 UTC",
+        "Built": "R 4.5.1; x86_64-w64-mingw32; 2025-08-20 02:04:25 UTC; windows",
+        "Archs": "x64"
       }
     },
     "globals": {
@@ -6643,352 +6679,694 @@
       "checksum": "0a870140d8d1df44558e65681f8563ae"
     },
     "app.R": {
-      "checksum": "3c8f97e1e9c641a01db5ad23bfb0d99e"
+      "checksum": "22d872dc0c19ca6eac41d6b5bc3f8c93"
     },
     "data/models/arimax_total_day_P18_0_2022_01_01.rds": {
-      "checksum": "994058f9aeb6008fa1ce5585f3190e3b"
+      "checksum": "a97e322841e0cb6a93a67acc97ad851b"
     },
     "data/models/arimax_total_day_P18_0_2023_01_01.rds": {
-      "checksum": "5784619fd5b1a4a826f76659caaaef10"
+      "checksum": "8eb82d0a4ed117263b054584961ebb06"
     },
     "data/models/arimax_total_day_P18_1_2022_01_01.rds": {
-      "checksum": "9415131e1d50b7efff4160cbc855ea2a"
+      "checksum": "3e9d3d5c0da31e1c8c7c44f93fa42e2f"
     },
     "data/models/arimax_total_day_P18_1_2023_01_01.rds": {
-      "checksum": "0e63f7375f8e8e8f3a28be2b8b929e06"
+      "checksum": "dd1f261ea24670fc24af3ee2d996662b"
     },
     "data/models/arimax_total_day_P18_10_2022_01_01.rds": {
-      "checksum": "1fb34efd2c77bfd60319a92fa255dbd7"
+      "checksum": "cf3c99ebc371048614a2328d5fd62a11"
     },
     "data/models/arimax_total_day_P18_10_2023_01_01.rds": {
-      "checksum": "e9e961e4210ccfb77e7257efede1c2d4"
+      "checksum": "b8f196bb5a9ba1f4dc80ffe2eed7a607"
     },
     "data/models/arimax_total_day_P18_11_2022_01_01.rds": {
-      "checksum": "53bb7c003b61dffb3ba326ff11d8895b"
+      "checksum": "fce7f81695a1dfddd55a22185513166e"
     },
     "data/models/arimax_total_day_P18_11_2023_01_01.rds": {
-      "checksum": "e48031c2ca25b0e546253aba660287b2"
+      "checksum": "77bd5df6736ed5b666f3c7ed95383cc6"
     },
     "data/models/arimax_total_day_P18_12_2022_01_01.rds": {
-      "checksum": "f89d7c752396486c6e59f3291dd16226"
+      "checksum": "871f346b6bfe46fd713bcb74ec8f3c0a"
     },
     "data/models/arimax_total_day_P18_12_2023_01_01.rds": {
-      "checksum": "2327b24847043b0e4495065aa7aa52a0"
+      "checksum": "d12908b46f677554ea2b2ee1b1c971f7"
     },
     "data/models/arimax_total_day_P18_13_2022_01_01.rds": {
-      "checksum": "f5906736b4506f36256edc408e211b6d"
+      "checksum": "98e070e2124cb48af8469827361a5272"
     },
     "data/models/arimax_total_day_P18_13_2023_01_01.rds": {
-      "checksum": "9f1d7e942ed8568178f70e1cc22047fd"
+      "checksum": "8ede08b19f08c239aa9e754c91390686"
     },
     "data/models/arimax_total_day_P18_14_2022_01_01.rds": {
-      "checksum": "1c899cc8f7e91294f746c31d29041737"
+      "checksum": "1406c36368560e7c372100e23c4d088a"
     },
     "data/models/arimax_total_day_P18_14_2023_01_01.rds": {
-      "checksum": "b6c3ea22ecfdce482daf4a42b5d724be"
+      "checksum": "4a9cd494aea18fd8f0d2d2f3b351be27"
     },
     "data/models/arimax_total_day_P18_15_2022_01_01.rds": {
-      "checksum": "9dc581b2a998c9866ffbe86767781187"
+      "checksum": "e143f0212912fcb57903bc9748318a45"
     },
     "data/models/arimax_total_day_P18_15_2023_01_01.rds": {
-      "checksum": "980c9f622773ad18eca4a0c88c03e365"
+      "checksum": "a900aa57fa22b925821fae731c43f8de"
     },
     "data/models/arimax_total_day_P18_16_2022_01_01.rds": {
-      "checksum": "84398f80b4db805b6fd90b2b4d0fed22"
+      "checksum": "55a8e4639c73ac7bee0b862b3fbe2492"
     },
     "data/models/arimax_total_day_P18_16_2023_01_01.rds": {
-      "checksum": "3bbf7c342d4ad949066b551512d85fe1"
+      "checksum": "23b57c2ac458b83e6da245187f4f9121"
     },
     "data/models/arimax_total_day_P18_17_2022_01_01.rds": {
-      "checksum": "50173f30cc1d45689ae48317555f1120"
+      "checksum": "091eadf935844b7155225a132a7a43d2"
     },
     "data/models/arimax_total_day_P18_17_2023_01_01.rds": {
-      "checksum": "b438155869a7bf993332d7d840f19915"
+      "checksum": "4b0347051382d519f74b2b1e2b5be545"
     },
     "data/models/arimax_total_day_P18_18_2022_01_01.rds": {
-      "checksum": "564916a1171ae66273e7db2e8f237602"
+      "checksum": "202335d26d91ccc7d207e5ec5921271f"
     },
     "data/models/arimax_total_day_P18_18_2023_01_01.rds": {
-      "checksum": "69506d56afc2cc367edb863c0b77d476"
+      "checksum": "f89b80f6d66e4a443fda2967fce472fb"
     },
     "data/models/arimax_total_day_P18_19_2022_01_01.rds": {
-      "checksum": "23435ea499891e212f12b71ff02e3c89"
+      "checksum": "523b610985810b1c6e8f8c1e4c494a33"
     },
     "data/models/arimax_total_day_P18_19_2023_01_01.rds": {
-      "checksum": "8d198467fa6fa44621bb24a95f4d4c8f"
+      "checksum": "3ec4704952b50e1bfcf0f4afd914799a"
     },
     "data/models/arimax_total_day_P18_20_2022_01_01.rds": {
-      "checksum": "681c4f65d52d23d6c3dcc18899267092"
+      "checksum": "0ec840710fa23aa94307781046dec812"
     },
     "data/models/arimax_total_day_P18_20_2023_01_01.rds": {
-      "checksum": "b90b3df02efb1f7b3c9174f446bc0c10"
+      "checksum": "d61ef6eeef5ced0fd27181c12e0800d7"
     },
     "data/models/arimax_total_day_P18_21_2022_01_01.rds": {
-      "checksum": "d36b3f4bf8f15e710a07943da87d5b22"
+      "checksum": "3cd80cb1a5744ffb3d22b6d9f95b4a76"
     },
     "data/models/arimax_total_day_P18_21_2023_01_01.rds": {
-      "checksum": "93f5ec1fb2f8e423de73cc8115bc8d45"
+      "checksum": "09072f1d68f009fec8cf7262828f4a0a"
     },
     "data/models/arimax_total_day_P18_22_2022_01_01.rds": {
-      "checksum": "5c65f7efda7eb03687ef1347b35d1cee"
+      "checksum": "cb2ee9ab9b41843586d9ad0dc900b4c7"
     },
     "data/models/arimax_total_day_P18_22_2023_01_01.rds": {
-      "checksum": "141027746502653633b56d150ead809e"
+      "checksum": "495e82691a7af0d3f8009090813ce585"
     },
     "data/models/arimax_total_day_P18_23_2022_01_01.rds": {
-      "checksum": "e89e97db8480feea90960754704bffff"
+      "checksum": "7c8a4e48e8f15d0f2cc4264316c5acd6"
     },
     "data/models/arimax_total_day_P18_23_2023_01_01.rds": {
-      "checksum": "51984aacc2b0f1bbb3a747a6aab31a73"
+      "checksum": "33b6ce3e54d12f1161ebe04d664c94cc"
     },
     "data/models/arimax_total_day_P18_49_0_2022_01_01.rds": {
-      "checksum": "a68687c7a0134dc0044d040da923af03"
+      "checksum": "01b1f8f80def5e84516efe1c0c05644e"
     },
     "data/models/arimax_total_day_P18_49_0_2023_01_01.rds": {
-      "checksum": "f73dfa917592a61a956bb2ce7d43cb3c"
+      "checksum": "c57251f71e6f9fc9442006ec1c16997a"
     },
     "data/models/arimax_total_day_P18_49_1_2022_01_01.rds": {
-      "checksum": "77962a2c876217da71f6774cc62d41a3"
+      "checksum": "d778ee79ef971f12c7c33f81d8b297ff"
     },
     "data/models/arimax_total_day_P18_49_1_2023_01_01.rds": {
-      "checksum": "e3f8a60c0ed961236bb45cbd1be8478d"
+      "checksum": "fd1734f321048b6a06706a9092e010b7"
     },
     "data/models/arimax_total_day_P18_49_10_2022_01_01.rds": {
-      "checksum": "7b9f165b81dc5cb1bf53e303274b9002"
+      "checksum": "a243274862801c570529c0851ca47ce3"
     },
     "data/models/arimax_total_day_P18_49_10_2023_01_01.rds": {
-      "checksum": "9632f8c8666598cd5a1fa66b38f7e36e"
+      "checksum": "9ff8f591461bcaa776aed8ab8eb1397c"
     },
     "data/models/arimax_total_day_P18_49_11_2022_01_01.rds": {
-      "checksum": "d7e2527bf1a7fb1bc89a3903e5be54d1"
+      "checksum": "8e4aa297403a3d56e293bcb2d39d1165"
     },
     "data/models/arimax_total_day_P18_49_11_2023_01_01.rds": {
-      "checksum": "b9dd298c1640188e8a6374a720075c12"
+      "checksum": "7053779a47c99de9be35240949ac7b04"
     },
     "data/models/arimax_total_day_P18_49_12_2022_01_01.rds": {
-      "checksum": "7da2379861dcd4ce473238e44419b353"
+      "checksum": "dc22b9a1ad4699f9ff8dacd3fbea3e0e"
     },
     "data/models/arimax_total_day_P18_49_12_2023_01_01.rds": {
-      "checksum": "c3f0ae294a1afa2f8f95bd9f2d1c799a"
+      "checksum": "eff7f1741344fac45dd599f6907cefbc"
     },
     "data/models/arimax_total_day_P18_49_13_2022_01_01.rds": {
-      "checksum": "6add408d92f7c4d033ee28a021ad69e7"
+      "checksum": "db00e1044c03acfae6046a9e0137a0a3"
     },
     "data/models/arimax_total_day_P18_49_13_2023_01_01.rds": {
-      "checksum": "0b78b3daa5365d05eb894035bb8c11dc"
+      "checksum": "70bfd88e3623a12f60a0503b08c086f3"
     },
     "data/models/arimax_total_day_P18_49_14_2022_01_01.rds": {
-      "checksum": "bb241d2db9271315e2167838f5d8a95e"
+      "checksum": "341bb261d3c2bc63b991ef5f0d5d840b"
     },
     "data/models/arimax_total_day_P18_49_14_2023_01_01.rds": {
-      "checksum": "c7d4dd8414bf4086c3e66de78b65708a"
+      "checksum": "59a1d4ae1d92f60c76454f8ffe9fc43f"
     },
     "data/models/arimax_total_day_P18_49_15_2022_01_01.rds": {
-      "checksum": "61a1603003ac680e50fd17950ca35df9"
+      "checksum": "f650d4e74946d52669140491720529e9"
     },
     "data/models/arimax_total_day_P18_49_15_2023_01_01.rds": {
-      "checksum": "015be284ea75ec4cf40bf1082e0cfb4b"
+      "checksum": "0edf4778c1dad7851570f85617080ea8"
     },
     "data/models/arimax_total_day_P18_49_16_2022_01_01.rds": {
-      "checksum": "c9f0d01e855c2945a9419dec1c50f5d7"
+      "checksum": "1f67570dd43434901f1a0259a5ca0e39"
     },
     "data/models/arimax_total_day_P18_49_16_2023_01_01.rds": {
-      "checksum": "14e806301b0459306abb7b9be6b79c77"
+      "checksum": "62acb61f5c495c6e640a87eca307bb12"
     },
     "data/models/arimax_total_day_P18_49_17_2022_01_01.rds": {
-      "checksum": "ce00a3e134f1f1339d62de1ae84b9f1f"
+      "checksum": "bc0b517131f34ccb2276ab362618666e"
     },
     "data/models/arimax_total_day_P18_49_17_2023_01_01.rds": {
-      "checksum": "7efc224af71d2e246be2d6a26b9313d7"
+      "checksum": "9ffd4a3de2279d7cef088d1092aee093"
     },
     "data/models/arimax_total_day_P18_49_18_2022_01_01.rds": {
-      "checksum": "731ef4ff06042e55ea5acf05e420c479"
+      "checksum": "d2c62416566a809121dc15ccb7be0d83"
     },
     "data/models/arimax_total_day_P18_49_18_2023_01_01.rds": {
-      "checksum": "53637bf6296f2f3cc2ab3164c0979c65"
+      "checksum": "ac5dbf7d4f572ac240b8aec7237c799c"
     },
     "data/models/arimax_total_day_P18_49_19_2022_01_01.rds": {
-      "checksum": "6b1a2c09d4194db0620dc9906853551d"
+      "checksum": "d425cb9afd6cf0b1df67f19cefabd1d0"
     },
     "data/models/arimax_total_day_P18_49_19_2023_01_01.rds": {
-      "checksum": "1d64c3be20f90edb4ae116ae1c3935d2"
+      "checksum": "ce1355320e14d79cbfd4f2184e69c07d"
     },
     "data/models/arimax_total_day_P18_49_20_2022_01_01.rds": {
-      "checksum": "e5ce18e727c264ad434b57141b315341"
+      "checksum": "26ab5e53e759b25e5829dd2331467217"
     },
     "data/models/arimax_total_day_P18_49_20_2023_01_01.rds": {
-      "checksum": "91e144c4af4386676e3eae989a9a3570"
+      "checksum": "b2ff17f4e0e70942e9bbeaca646222f4"
     },
     "data/models/arimax_total_day_P18_49_21_2022_01_01.rds": {
-      "checksum": "dbe28e77bd1e5468b4e65558413162c5"
+      "checksum": "91b739142d36361d00bb1d636a79b387"
     },
     "data/models/arimax_total_day_P18_49_21_2023_01_01.rds": {
-      "checksum": "364281d5f284ade6814a62e189951564"
+      "checksum": "c43e162a853459f572789391d296050f"
     },
     "data/models/arimax_total_day_P18_49_22_2022_01_01.rds": {
-      "checksum": "605dce868cb19855b7ad8bacabea58fa"
+      "checksum": "10ed12e05e817b50c0dfc853ba5eece1"
     },
     "data/models/arimax_total_day_P18_49_22_2023_01_01.rds": {
-      "checksum": "7f262cb4af5a5bdcf08cde39776cba8d"
+      "checksum": "def715f0e25624ed24dabc265d28f289"
     },
     "data/models/arimax_total_day_P18_49_23_2022_01_01.rds": {
-      "checksum": "6bacfbc9a3945335ed9e74ff02e02d56"
+      "checksum": "406c089644310d63de60251b4a0615f5"
     },
     "data/models/arimax_total_day_P18_49_23_2023_01_01.rds": {
-      "checksum": "fbe096e9d47292b2daba60992438bffb"
+      "checksum": "a6a9ae6a6f984d96f60f382de465886a"
     },
     "data/models/arimax_total_day_P18_49_7_2022_01_01.rds": {
-      "checksum": "c96ddb09b005ac65d1a54520536bf182"
+      "checksum": "f8525cb158478c91c74d385312a09f1b"
     },
     "data/models/arimax_total_day_P18_49_7_2023_01_01.rds": {
-      "checksum": "d951d7480dcc5ef944a82fd0d2f4721a"
+      "checksum": "4a2f446382e7d013ece7a9f2489f365b"
     },
     "data/models/arimax_total_day_P18_49_8_2022_01_01.rds": {
-      "checksum": "9771c73c4729ff37121b1e757cc6398e"
+      "checksum": "3946d28d107703dffca365df8fa3f709"
     },
     "data/models/arimax_total_day_P18_49_8_2023_01_01.rds": {
-      "checksum": "fee56c086634d9b0376c97e17732ea11"
+      "checksum": "df8a5e5c6bd8043500e2c7a932d8416d"
     },
     "data/models/arimax_total_day_P18_49_9_2022_01_01.rds": {
-      "checksum": "0e950d2f86365811bbf143055099a3fb"
+      "checksum": "24bbbe08dbcb8361d8d20864e9c76f6d"
     },
     "data/models/arimax_total_day_P18_49_9_2023_01_01.rds": {
-      "checksum": "6e04f9d64b320e503ebbfff46d495d01"
+      "checksum": "d430436c83ffe8bd609dedc351da932b"
     },
     "data/models/arimax_total_day_P18_7_2022_01_01.rds": {
-      "checksum": "bf4545d02db6cd8f070d1985c359278a"
+      "checksum": "a312a0c2e101a35f196c6af5e873bc3d"
     },
     "data/models/arimax_total_day_P18_7_2023_01_01.rds": {
-      "checksum": "2320cac3ac52dd7bd39360cbeba7b651"
+      "checksum": "fe9f4a6ac78ed3e02093574e3c75acac"
     },
     "data/models/arimax_total_day_P18_8_2022_01_01.rds": {
-      "checksum": "5b4c73611e8b6029532d1faa6daebd5a"
+      "checksum": "3dccb319f203756c371f7909464e44ab"
     },
     "data/models/arimax_total_day_P18_8_2023_01_01.rds": {
-      "checksum": "449a7fd465799296cf222bd54c014e26"
+      "checksum": "35e96065df2754822457296b0de41d5b"
     },
     "data/models/arimax_total_day_P18_9_2022_01_01.rds": {
-      "checksum": "a60e7dc98999d6863b5e191348c97e97"
+      "checksum": "9a8d5fb3f2ff96d601677b8145e750f8"
     },
     "data/models/arimax_total_day_P18_9_2023_01_01.rds": {
-      "checksum": "fe880edffe993930f00d9d1cdeac4f1c"
+      "checksum": "17d51cd7921d4b6609e4f5125ac99e26"
     },
     "data/models/arimax_total_day_P2_0_2022_01_01.rds": {
-      "checksum": "7de6e4106de72b65a72fc0cb76a4e977"
+      "checksum": "727bc8aa832c01a98ad9d681ee6bcd6d"
     },
     "data/models/arimax_total_day_P2_0_2023_01_01.rds": {
-      "checksum": "a5b54befe386b9325cd7c2c6fdb6d930"
+      "checksum": "edec75016cbd286047c5e7907474b28e"
     },
     "data/models/arimax_total_day_P2_1_2022_01_01.rds": {
-      "checksum": "403648364e49fb40ef6deda2169b606c"
+      "checksum": "697c9bde1b2b7da67c4432b3b744346a"
     },
     "data/models/arimax_total_day_P2_1_2023_01_01.rds": {
-      "checksum": "10c65417439ec14d293f4a8fc3eab41d"
+      "checksum": "31628409f971b0124eca844713461aba"
     },
     "data/models/arimax_total_day_P2_10_2022_01_01.rds": {
-      "checksum": "efa7ac9c04496618e95ae070415dbfce"
+      "checksum": "1cd4958988c92d60216a8b40a0ef08b1"
     },
     "data/models/arimax_total_day_P2_10_2023_01_01.rds": {
-      "checksum": "d1fc76878f9224b9597e7f31b9ad9dd0"
+      "checksum": "753c5ef6ca85389a0c00e5fa45dde029"
     },
     "data/models/arimax_total_day_P2_11_2022_01_01.rds": {
-      "checksum": "acb7243d43db474d6548ed2b782173c6"
+      "checksum": "55810483162b9d51cf1346d3f133d04e"
     },
     "data/models/arimax_total_day_P2_11_2023_01_01.rds": {
-      "checksum": "2291c84d9767691ac226dba5115cd83f"
+      "checksum": "3e47c6b4bf49e0759b02705481643d1d"
     },
     "data/models/arimax_total_day_P2_12_2022_01_01.rds": {
-      "checksum": "0cb0698af2fcea1bc5b808e0c313eafd"
+      "checksum": "2554e0f0ac9c4c0ff8c1bef019ed3e86"
     },
     "data/models/arimax_total_day_P2_12_2023_01_01.rds": {
-      "checksum": "2be9a188ce44ce230b45ebc4a67bece4"
+      "checksum": "8ae22ed54bc8751d8fd2fa918326213f"
     },
     "data/models/arimax_total_day_P2_13_2022_01_01.rds": {
-      "checksum": "dcc2b8611796703f0cc1e0d1547d007d"
+      "checksum": "c0478a88a3a2dc0afd80aa91f0a91ce8"
     },
     "data/models/arimax_total_day_P2_13_2023_01_01.rds": {
-      "checksum": "3a6441f3d76bd11c4822bcc8e6da842b"
+      "checksum": "301b3747a6e96596f7891f2220649742"
     },
     "data/models/arimax_total_day_P2_14_2022_01_01.rds": {
-      "checksum": "1a63c663520f082c9baad53102433ae7"
+      "checksum": "bbb5a41eb7bbd5ba7107a9bf2a4f5500"
     },
     "data/models/arimax_total_day_P2_14_2023_01_01.rds": {
-      "checksum": "f1a9194b8ef8f03f7f47ddbc26a1ee11"
+      "checksum": "6c18965102c44f1f0beb2db71f87743c"
     },
     "data/models/arimax_total_day_P2_15_2022_01_01.rds": {
-      "checksum": "dd5d104c5df042ff3e99051cc87a4b08"
+      "checksum": "b5f953552abe4958b0f2d39e7de5f970"
     },
     "data/models/arimax_total_day_P2_15_2023_01_01.rds": {
-      "checksum": "6ad3715476fc8e8900267144ca4213c7"
+      "checksum": "10c1708bf594186eb3736fbb2dc04835"
     },
     "data/models/arimax_total_day_P2_16_2022_01_01.rds": {
-      "checksum": "df1c92a4d969c245fb0a5e2b7e6647c3"
+      "checksum": "e560a143b73f8ccabb021739725085a5"
     },
     "data/models/arimax_total_day_P2_16_2023_01_01.rds": {
-      "checksum": "92d8d91b7cbfb9d4d01f5c6b9539a549"
+      "checksum": "b3593ee945e038be51d3d136e7f0cc16"
     },
     "data/models/arimax_total_day_P2_17_2022_01_01.rds": {
-      "checksum": "c5a64357e3188a2570a168399c53c624"
+      "checksum": "d6e975965e251970d8fbaa74a76a4e68"
     },
     "data/models/arimax_total_day_P2_17_2023_01_01.rds": {
-      "checksum": "e87b5b10bc09605915ae51bae1cc4e8c"
+      "checksum": "2224ee3e60fa57a8e509e2cbf68652c1"
     },
     "data/models/arimax_total_day_P2_18_2022_01_01.rds": {
-      "checksum": "19d3d3a3a4d6262876fa19823516065e"
+      "checksum": "217be280c7ddc8497d9e67f80f80d3a4"
     },
     "data/models/arimax_total_day_P2_18_2023_01_01.rds": {
-      "checksum": "479b4928e29b8e56367e7dafbaca55b3"
+      "checksum": "652d0ec284480070b29efa8dc6980f97"
     },
     "data/models/arimax_total_day_P2_19_2022_01_01.rds": {
-      "checksum": "f4d0306da9af1f8094bffa1950b7b94a"
+      "checksum": "95e93436bbc940665ab041c4a176e56a"
     },
     "data/models/arimax_total_day_P2_19_2023_01_01.rds": {
-      "checksum": "c3ada49d050882f0b46f21bdcf79a62f"
+      "checksum": "59835111d6e0823d40b427b912bcb1a4"
     },
     "data/models/arimax_total_day_P2_20_2022_01_01.rds": {
-      "checksum": "ccdaf4a9f6a18c5191249c3560f4b433"
+      "checksum": "381cf1c32851fabb64274b91db202eb0"
     },
     "data/models/arimax_total_day_P2_20_2023_01_01.rds": {
-      "checksum": "cb5ed2a5fe30b59afeab719ba4e3812f"
+      "checksum": "dfb34640cfc782a93e93702fd648263b"
     },
     "data/models/arimax_total_day_P2_21_2022_01_01.rds": {
-      "checksum": "546f83a3f79a6dba6ece735eff37f54f"
+      "checksum": "f204c0c51de5fa0d005b448b2896afed"
     },
     "data/models/arimax_total_day_P2_21_2023_01_01.rds": {
-      "checksum": "da6ae4753a8772ba1a45026cc4975501"
+      "checksum": "fc80f0ba7edc50e77494d7519d9bba84"
     },
     "data/models/arimax_total_day_P2_22_2022_01_01.rds": {
-      "checksum": "dc00005b8cf1324c13d339c43ddcc51e"
+      "checksum": "82342c00275ddcb765f482d96ef37b4f"
     },
     "data/models/arimax_total_day_P2_22_2023_01_01.rds": {
-      "checksum": "aa74541b926e29c233f57d1d1ffa4be4"
+      "checksum": "2b955468ec5759a1bfbc183641cabec9"
     },
     "data/models/arimax_total_day_P2_23_2022_01_01.rds": {
-      "checksum": "64b2ce45cb90ea20da5f3744306e39d9"
+      "checksum": "9c4eb8d96b64732fd70d1df4acd55a8d"
     },
     "data/models/arimax_total_day_P2_23_2023_01_01.rds": {
-      "checksum": "8e91582adc25157da3dd36ff8dcc9472"
+      "checksum": "c052ceb98a550c71b43350fd3655681f"
     },
     "data/models/arimax_total_day_P2_7_2022_01_01.rds": {
-      "checksum": "78f048b5f2841d66c8afd32f093a7ebc"
+      "checksum": "8382a8cc487a9099e001f034b930a40f"
     },
     "data/models/arimax_total_day_P2_7_2023_01_01.rds": {
-      "checksum": "d106d9a41b2b74687d3435c6026dbdfa"
+      "checksum": "c82d8616a84ef512e42e7b5563a70443"
     },
     "data/models/arimax_total_day_P2_8_2022_01_01.rds": {
-      "checksum": "522bc88b4ef326af14b002bb84a5f711"
+      "checksum": "f029e5a1d444454e7d60a07c07be5a5e"
     },
     "data/models/arimax_total_day_P2_8_2023_01_01.rds": {
-      "checksum": "7c190eeb1117c7a3609ff86f27f84247"
+      "checksum": "ffb311892cbd30c0ff71bd9a3050dd7c"
     },
     "data/models/arimax_total_day_P2_9_2022_01_01.rds": {
-      "checksum": "27b46d26a36eeacae7357112447ff3f9"
+      "checksum": "a2da04c495d96f2bf223e2b5560d23a8"
     },
     "data/models/arimax_total_day_P2_9_2023_01_01.rds": {
-      "checksum": "09f338699c9749e02c0905860001995f"
+      "checksum": "e9aacd1865d6e0d7a659bb1e17aca9d5"
+    },
+    "data/models/glmnet_total_day_P18_0_2022_01_01.rds": {
+      "checksum": "2edded139aa7045b71b07b748ddc25e1"
+    },
+    "data/models/glmnet_total_day_P18_0_2023_01_01.rds": {
+      "checksum": "24089c30f563c473f73685048752c42c"
+    },
+    "data/models/glmnet_total_day_P18_1_2022_01_01.rds": {
+      "checksum": "c151f369baf6176a8860581316283f6f"
+    },
+    "data/models/glmnet_total_day_P18_1_2023_01_01.rds": {
+      "checksum": "e5d1a41a9e5e0dbf56fb40cd32e2b977"
+    },
+    "data/models/glmnet_total_day_P18_10_2022_01_01.rds": {
+      "checksum": "6c8125a2f9aaf91aef5aa35d89c11c87"
+    },
+    "data/models/glmnet_total_day_P18_10_2023_01_01.rds": {
+      "checksum": "ac4971fc4ec4d95402197cfbd5d6c93f"
+    },
+    "data/models/glmnet_total_day_P18_11_2022_01_01.rds": {
+      "checksum": "85f2ad7d6f8e92cdf4b8465dc25660db"
+    },
+    "data/models/glmnet_total_day_P18_11_2023_01_01.rds": {
+      "checksum": "5b901fc461e23f91600ba96b794faf17"
+    },
+    "data/models/glmnet_total_day_P18_12_2022_01_01.rds": {
+      "checksum": "1d41e9041b8ead698a81159ff30cb8c9"
+    },
+    "data/models/glmnet_total_day_P18_12_2023_01_01.rds": {
+      "checksum": "3a5cab5c685b8c7c2e5d0e749ac47504"
+    },
+    "data/models/glmnet_total_day_P18_13_2022_01_01.rds": {
+      "checksum": "fc15f1fc8425326c2dc2bc332d6293b0"
+    },
+    "data/models/glmnet_total_day_P18_13_2023_01_01.rds": {
+      "checksum": "369b06d124918027c7e0cd79635c928f"
+    },
+    "data/models/glmnet_total_day_P18_14_2022_01_01.rds": {
+      "checksum": "e76bc53f6b5d9f7adec94b8aa34c4c07"
+    },
+    "data/models/glmnet_total_day_P18_14_2023_01_01.rds": {
+      "checksum": "bb7f12ac771f10f8feaa0e89a4687dac"
+    },
+    "data/models/glmnet_total_day_P18_15_2022_01_01.rds": {
+      "checksum": "5b7b599ae92d052bddcf45aac05e976d"
+    },
+    "data/models/glmnet_total_day_P18_15_2023_01_01.rds": {
+      "checksum": "dfd4b3a70eb5adf46e768d7068bc55a1"
+    },
+    "data/models/glmnet_total_day_P18_16_2022_01_01.rds": {
+      "checksum": "aa1bf974ae773ae2a674556dcfff78a7"
+    },
+    "data/models/glmnet_total_day_P18_16_2023_01_01.rds": {
+      "checksum": "02225f8f8cc10cf796e67fac45bc54db"
+    },
+    "data/models/glmnet_total_day_P18_17_2022_01_01.rds": {
+      "checksum": "c4b8b7e446ea9b037c1fe6c77fa36007"
+    },
+    "data/models/glmnet_total_day_P18_17_2023_01_01.rds": {
+      "checksum": "72b581c7c327953bc482bc35be68392d"
+    },
+    "data/models/glmnet_total_day_P18_18_2022_01_01.rds": {
+      "checksum": "0b11ccb3b1a0416040353af87407644f"
+    },
+    "data/models/glmnet_total_day_P18_18_2023_01_01.rds": {
+      "checksum": "88c236c94fb2f9307377a60548fa8ed1"
+    },
+    "data/models/glmnet_total_day_P18_19_2022_01_01.rds": {
+      "checksum": "b945e85828990d941b41f8af416c2729"
+    },
+    "data/models/glmnet_total_day_P18_19_2023_01_01.rds": {
+      "checksum": "bf2e3254161532d549e941dbcf2ba112"
+    },
+    "data/models/glmnet_total_day_P18_20_2022_01_01.rds": {
+      "checksum": "0da9c9f563b89cd757d70152ea2a8e21"
+    },
+    "data/models/glmnet_total_day_P18_20_2023_01_01.rds": {
+      "checksum": "efc7d653e757e85512d8b57166c52322"
+    },
+    "data/models/glmnet_total_day_P18_21_2022_01_01.rds": {
+      "checksum": "065d773b6804850c2a7b02b6a97d1d7d"
+    },
+    "data/models/glmnet_total_day_P18_21_2023_01_01.rds": {
+      "checksum": "9b0e028bb5b0167d178e28d62ea3148e"
+    },
+    "data/models/glmnet_total_day_P18_22_2022_01_01.rds": {
+      "checksum": "059270445cbdd40c284fc6488b45d175"
+    },
+    "data/models/glmnet_total_day_P18_22_2023_01_01.rds": {
+      "checksum": "bb744d3b7dc0992e2058601c935e957b"
+    },
+    "data/models/glmnet_total_day_P18_23_2022_01_01.rds": {
+      "checksum": "17b5bf62a1500744cd05c69dd2c45252"
+    },
+    "data/models/glmnet_total_day_P18_23_2023_01_01.rds": {
+      "checksum": "c0448d470d244151a039a72ded5b3952"
+    },
+    "data/models/glmnet_total_day_P18_49_0_2022_01_01.rds": {
+      "checksum": "e1b2180fb8634af70ad4381fb5401ae3"
+    },
+    "data/models/glmnet_total_day_P18_49_0_2023_01_01.rds": {
+      "checksum": "fcf7f8a83e62e871b0fed2ba1aa00b19"
+    },
+    "data/models/glmnet_total_day_P18_49_1_2022_01_01.rds": {
+      "checksum": "d9f1ccdc6c57ceb88162711e58177663"
+    },
+    "data/models/glmnet_total_day_P18_49_1_2023_01_01.rds": {
+      "checksum": "e923299d616ef57899d273de5f8ed5cc"
+    },
+    "data/models/glmnet_total_day_P18_49_10_2022_01_01.rds": {
+      "checksum": "43b5d533febe83398294b69f17b01801"
+    },
+    "data/models/glmnet_total_day_P18_49_10_2023_01_01.rds": {
+      "checksum": "c87016cd2fd2c729719fdab74bb005dd"
+    },
+    "data/models/glmnet_total_day_P18_49_11_2022_01_01.rds": {
+      "checksum": "49df8b4821823385587e39b33e57fb40"
+    },
+    "data/models/glmnet_total_day_P18_49_11_2023_01_01.rds": {
+      "checksum": "306a31456a42a6eb1c191cc96af6992b"
+    },
+    "data/models/glmnet_total_day_P18_49_12_2022_01_01.rds": {
+      "checksum": "6917e7d994d14f3538506065c01bdb4b"
+    },
+    "data/models/glmnet_total_day_P18_49_12_2023_01_01.rds": {
+      "checksum": "fceb6cb176919764a4bb581412ceeaa7"
+    },
+    "data/models/glmnet_total_day_P18_49_13_2022_01_01.rds": {
+      "checksum": "4de5635f58140cbeaaf0254d6333e476"
+    },
+    "data/models/glmnet_total_day_P18_49_13_2023_01_01.rds": {
+      "checksum": "d4b296ac94d0e08db65a1106fac875ee"
+    },
+    "data/models/glmnet_total_day_P18_49_14_2022_01_01.rds": {
+      "checksum": "f131cf902c3c83c1fb56d421ac7c551a"
+    },
+    "data/models/glmnet_total_day_P18_49_14_2023_01_01.rds": {
+      "checksum": "59ecb2166f295157c02ac8ce5ff973e8"
+    },
+    "data/models/glmnet_total_day_P18_49_15_2022_01_01.rds": {
+      "checksum": "8ee789dd64a67405fdfb726d9f7bd8f1"
+    },
+    "data/models/glmnet_total_day_P18_49_15_2023_01_01.rds": {
+      "checksum": "f1a4b3252821e40edc64342aa2572e71"
+    },
+    "data/models/glmnet_total_day_P18_49_16_2022_01_01.rds": {
+      "checksum": "51b14547950995c87a157791afa76cf8"
+    },
+    "data/models/glmnet_total_day_P18_49_16_2023_01_01.rds": {
+      "checksum": "f36c3aac1975eea2b990b7ee49c2cfbe"
+    },
+    "data/models/glmnet_total_day_P18_49_17_2022_01_01.rds": {
+      "checksum": "33a99f57e69103dab821209e130eae8d"
+    },
+    "data/models/glmnet_total_day_P18_49_17_2023_01_01.rds": {
+      "checksum": "ebb505bb83adebac263ff35489f3322f"
+    },
+    "data/models/glmnet_total_day_P18_49_18_2022_01_01.rds": {
+      "checksum": "100f0f4e03e8ae01d0ab2d18ce4198cd"
+    },
+    "data/models/glmnet_total_day_P18_49_18_2023_01_01.rds": {
+      "checksum": "e092a0f833dc733f1a35bce76d6b3fff"
+    },
+    "data/models/glmnet_total_day_P18_49_19_2022_01_01.rds": {
+      "checksum": "428097a9b65419b4327317b81f1c5c35"
+    },
+    "data/models/glmnet_total_day_P18_49_19_2023_01_01.rds": {
+      "checksum": "3dac9c18ed3b38d34546b8abc0fd0ea9"
+    },
+    "data/models/glmnet_total_day_P18_49_20_2022_01_01.rds": {
+      "checksum": "dd4d1e5227099cc32f2586a33330366a"
+    },
+    "data/models/glmnet_total_day_P18_49_20_2023_01_01.rds": {
+      "checksum": "68679498588c8b8b383839493c61fce7"
+    },
+    "data/models/glmnet_total_day_P18_49_21_2022_01_01.rds": {
+      "checksum": "be773f2e869d9416a6916e30de6b295e"
+    },
+    "data/models/glmnet_total_day_P18_49_21_2023_01_01.rds": {
+      "checksum": "1f77952edcdf0b46a8314df56fdfe902"
+    },
+    "data/models/glmnet_total_day_P18_49_22_2022_01_01.rds": {
+      "checksum": "3a8dd3e30e2eb90637f78a51915066b3"
+    },
+    "data/models/glmnet_total_day_P18_49_22_2023_01_01.rds": {
+      "checksum": "271090729f4691d15ecb4ad5c406ab47"
+    },
+    "data/models/glmnet_total_day_P18_49_23_2022_01_01.rds": {
+      "checksum": "b13e43e5c102a835887eac2dc5c07515"
+    },
+    "data/models/glmnet_total_day_P18_49_23_2023_01_01.rds": {
+      "checksum": "72876cf5b2fd2f99f1e0c5342156fcc7"
+    },
+    "data/models/glmnet_total_day_P18_49_7_2022_01_01.rds": {
+      "checksum": "fa147b7488d8e6afb458b8f3baa8b912"
+    },
+    "data/models/glmnet_total_day_P18_49_7_2023_01_01.rds": {
+      "checksum": "fbd6da829e5bca71306da0e4bd183a33"
+    },
+    "data/models/glmnet_total_day_P18_49_8_2022_01_01.rds": {
+      "checksum": "52c5188466ccf2f3641b172df0d8b512"
+    },
+    "data/models/glmnet_total_day_P18_49_8_2023_01_01.rds": {
+      "checksum": "25c7a339780e2dc1d7da8a617c41f872"
+    },
+    "data/models/glmnet_total_day_P18_49_9_2022_01_01.rds": {
+      "checksum": "33ece5ae6f76397273c9c4053f40b5f4"
+    },
+    "data/models/glmnet_total_day_P18_49_9_2023_01_01.rds": {
+      "checksum": "0b1d224be3cdcf5295f86ce58574aef3"
+    },
+    "data/models/glmnet_total_day_P18_7_2022_01_01.rds": {
+      "checksum": "ced904397e519a65b8981853ddfa450c"
+    },
+    "data/models/glmnet_total_day_P18_7_2023_01_01.rds": {
+      "checksum": "fbc373016d5b03ee6ff6272e679014ae"
+    },
+    "data/models/glmnet_total_day_P18_8_2022_01_01.rds": {
+      "checksum": "646edc89f62647be6af5cd4f9032cdb0"
+    },
+    "data/models/glmnet_total_day_P18_8_2023_01_01.rds": {
+      "checksum": "fd67d05b11c331b3285f438a5857cfb7"
+    },
+    "data/models/glmnet_total_day_P18_9_2022_01_01.rds": {
+      "checksum": "40b40fc6d8c728763dc1062ee6b891ff"
+    },
+    "data/models/glmnet_total_day_P18_9_2023_01_01.rds": {
+      "checksum": "d660a8a93d0f350cd682f6e216d2d94b"
+    },
+    "data/models/glmnet_total_day_P2_0_2022_01_01.rds": {
+      "checksum": "8670c4ca2001ca9fb47b5f8c1bc33fff"
+    },
+    "data/models/glmnet_total_day_P2_0_2023_01_01.rds": {
+      "checksum": "2269d053a589b5cc64986838fc4082ec"
+    },
+    "data/models/glmnet_total_day_P2_1_2022_01_01.rds": {
+      "checksum": "4ca1488bdf6d55db1e5fa39b36b54fbd"
+    },
+    "data/models/glmnet_total_day_P2_1_2023_01_01.rds": {
+      "checksum": "619c4f9fbf9317bdc955744074bfa4d6"
+    },
+    "data/models/glmnet_total_day_P2_10_2022_01_01.rds": {
+      "checksum": "b3eb0fe1d51c2a57332a4d5e2baf5de9"
+    },
+    "data/models/glmnet_total_day_P2_10_2023_01_01.rds": {
+      "checksum": "e1c28408dc0e9a093a5b7a6d6fae702b"
+    },
+    "data/models/glmnet_total_day_P2_11_2022_01_01.rds": {
+      "checksum": "5914ea48833668bc5f259a3d1b3574b4"
+    },
+    "data/models/glmnet_total_day_P2_11_2023_01_01.rds": {
+      "checksum": "34711270f234004be905723050c0ba9e"
+    },
+    "data/models/glmnet_total_day_P2_12_2022_01_01.rds": {
+      "checksum": "93c04a3e56b4e5a920567fa2c22b5a30"
+    },
+    "data/models/glmnet_total_day_P2_12_2023_01_01.rds": {
+      "checksum": "e50be920b647e6fa0f910e9ae419f64f"
+    },
+    "data/models/glmnet_total_day_P2_13_2022_01_01.rds": {
+      "checksum": "0c526b06aa9260428570e3aca29db3ca"
+    },
+    "data/models/glmnet_total_day_P2_13_2023_01_01.rds": {
+      "checksum": "6a22a5e59403c1747dd385472aec33be"
+    },
+    "data/models/glmnet_total_day_P2_14_2022_01_01.rds": {
+      "checksum": "e0163bb5233a4c19d6b9fe907084b179"
+    },
+    "data/models/glmnet_total_day_P2_14_2023_01_01.rds": {
+      "checksum": "ff1fc4b6d41a726e5083399359964fb2"
+    },
+    "data/models/glmnet_total_day_P2_15_2022_01_01.rds": {
+      "checksum": "ed0a0119531a2ea626d497feadf8e009"
+    },
+    "data/models/glmnet_total_day_P2_15_2023_01_01.rds": {
+      "checksum": "7e0d28c8d5057aab27ab24b14f52f7bb"
+    },
+    "data/models/glmnet_total_day_P2_16_2022_01_01.rds": {
+      "checksum": "fb25a01856b823d64bb64591cbd6d1b6"
+    },
+    "data/models/glmnet_total_day_P2_16_2023_01_01.rds": {
+      "checksum": "1c5fb2fc31da65d1fa4edc6e89a03622"
+    },
+    "data/models/glmnet_total_day_P2_17_2022_01_01.rds": {
+      "checksum": "8b19b280241630b79ad7007578bbb58d"
+    },
+    "data/models/glmnet_total_day_P2_17_2023_01_01.rds": {
+      "checksum": "4c0573f954d9eb8de6c6e4622fb2d0cf"
+    },
+    "data/models/glmnet_total_day_P2_18_2022_01_01.rds": {
+      "checksum": "0108d03eefe44736aaade872949e2fa6"
+    },
+    "data/models/glmnet_total_day_P2_18_2023_01_01.rds": {
+      "checksum": "438b7149caeae4b018007beaeb4f7639"
+    },
+    "data/models/glmnet_total_day_P2_19_2022_01_01.rds": {
+      "checksum": "a80ec2fc1ac520820ad367bfc363897a"
+    },
+    "data/models/glmnet_total_day_P2_19_2023_01_01.rds": {
+      "checksum": "8afa3ddb6b882d248c61087533b3d8eb"
+    },
+    "data/models/glmnet_total_day_P2_20_2022_01_01.rds": {
+      "checksum": "565ab23b33e61ccdcc3b8f0d06837131"
+    },
+    "data/models/glmnet_total_day_P2_20_2023_01_01.rds": {
+      "checksum": "691640a4b8c884ea2d5a2e0d48fb68e5"
+    },
+    "data/models/glmnet_total_day_P2_21_2022_01_01.rds": {
+      "checksum": "5f5274a6267f2522e8532f0258578a04"
+    },
+    "data/models/glmnet_total_day_P2_21_2023_01_01.rds": {
+      "checksum": "9498e00c1a2551aa193afef00df6dc1c"
+    },
+    "data/models/glmnet_total_day_P2_22_2022_01_01.rds": {
+      "checksum": "1ddb11fcaf46b2148b3bb7c2f1c593cb"
+    },
+    "data/models/glmnet_total_day_P2_22_2023_01_01.rds": {
+      "checksum": "d264a1b015eccfc7e32a54888d61da00"
+    },
+    "data/models/glmnet_total_day_P2_23_2022_01_01.rds": {
+      "checksum": "7a83bd4315c135a3776a52583aeebaa5"
+    },
+    "data/models/glmnet_total_day_P2_23_2023_01_01.rds": {
+      "checksum": "520a445862ea1360ed33de2c0687874d"
+    },
+    "data/models/glmnet_total_day_P2_7_2022_01_01.rds": {
+      "checksum": "56c0dd20d66efcc18f3bb9509e9e237e"
+    },
+    "data/models/glmnet_total_day_P2_7_2023_01_01.rds": {
+      "checksum": "a5492a02da354210723c174d91dee78e"
+    },
+    "data/models/glmnet_total_day_P2_8_2022_01_01.rds": {
+      "checksum": "85e9edbcb65081931534cf69c9796043"
+    },
+    "data/models/glmnet_total_day_P2_8_2023_01_01.rds": {
+      "checksum": "76422160cc83b75dec3e6babacdd7368"
+    },
+    "data/models/glmnet_total_day_P2_9_2022_01_01.rds": {
+      "checksum": "fd330ccfdf2b96c8402b995771524906"
+    },
+    "data/models/glmnet_total_day_P2_9_2023_01_01.rds": {
+      "checksum": "3e1b5afabb1cd93e7d1426ee7f32ed1d"
     },
     "data/raw_data.parquet": {
-      "checksum": "1b92022b22baa1bc0e1ef962c18951e8"
+      "checksum": "15c397708e3279d6029ea23bdaba6c0f"
     },
     "EDA/EDA - People Using TV.html": {
       "checksum": "b0a22ceaa4b3c0ce4946bc8fa9b9bcba"
@@ -6998,6 +7376,9 @@
     },
     "EDA/exploring_models.qmd": {
       "checksum": "b5b79827d0f412cf14f9ac41d34e025f"
+    },
+    "README.md": {
+      "checksum": "e5af95ff35f73122b2541aa92863de92"
     },
     "requirements.txt": {
       "checksum": "a0ede965753458588114971b6205a1d6"
@@ -7015,7 +7396,7 @@
       "checksum": "39f955af45f297c6ed54ca323d448a28"
     },
     "scripts/pretrain_models.R": {
-      "checksum": "b1e47e444361be5e8b6668dfa84326ae"
+      "checksum": "25a828775cee9dd9256f0fdcc3645a5c"
     },
     "scripts/query_template.sql": {
       "checksum": "f00967bd23a229258a6e76dce4d3d7b1"
@@ -7024,7 +7405,7 @@
       "checksum": "eee943b36bc450ae46120ee3276c14c4"
     },
     "scripts/workflows.R": {
-      "checksum": "1a3cf9fbbfde8dbfb0ac2586d5539438"
+      "checksum": "668d7ad2092bc18b25e3b567bec49a38"
     }
   },
   "users": null
