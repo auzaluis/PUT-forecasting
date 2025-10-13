@@ -18,13 +18,16 @@ source("scripts/utils.R")
 
 # Load raw_data
 models_path <- "data/models"
-model_files <- list.files(models_path, pattern = "^arimax_.*\\.rds$", full.names = TRUE)
+model_files_arimax <- list.files(models_path, pattern = "(^arimax_.*)\\.rds$", full.names = TRUE)
+model_files_glmnet <- list.files(models_path, pattern = "(^glmnet_.*)\\.rds$", full.names = TRUE)
+model_files <- c(model_files_arimax, model_files_glmnet)
 
 raw_data_path <- "data/raw_data.parquet"
 df <- load_data(raw_data_path)
 
 # Lookup for models
-model_lookup <- setNames(model_files, gsub("arimax_|\\.rds", "", basename(model_files)))
+model_lookup_arimax <- setNames(model_files_arimax, gsub("arimax_|\\.rds", "", basename(model_files_arimax)))
+model_lookup_glmnet <- setNames(model_files_glmnet, gsub("glmnet_|\\.rds", "", basename(model_files_glmnet)))
 
 # date input values
 date_values <- as.Date(c("2022-01-01", "2023-01-01"))
@@ -46,8 +49,8 @@ ui <- fluidPage(
       ),
       pickerInput(
         "daypart", "Daypart:",
-        choices = unique(df$daypart)[1], # limit to total_day for simplicity
-        selected = unique(df$daypart)[1]
+        choices = unique(df$daypart)[3], # limit to total_day for simplicity
+        selected = unique(df$daypart)[3]
       ),
       pickerInput(
         "hours", "Hours:",
@@ -91,13 +94,17 @@ ui <- fluidPage(
                        "Select metric:",
                        choices = c(
                          "MAPE" = "mape",
+                         "RMSE" = "rmse",
+                         "MSE" = "mse",
+                         "MAE" = "mae",
+                         "R²" = "rsq",
                          "Normalidad (Shapiro p-value)" = "norm_pvalue",
                          "Homocedasticidad (BP p-value)" = "homo_pvalue",
                          "Autocorrelación (Ljung-Box p-value)" = "ac_pvalue"
                        ),
                        selected = "mape"
                      ),
-                     plotlyOutput("metric_hist")
+                     plotlyOutput("metric_hist", height = "600px")
             ),
             tabPanel("Metrics Facet", 
                      br(),
@@ -106,13 +113,17 @@ ui <- fluidPage(
                        "Select metric:",
                        choices = c(
                          "MAPE" = "mape",
+                         "RMSE" = "rmse",
+                         "MSE" = "mse",
+                         "MAE" = "mae",
+                         "R²" = "rsq",
                          "Normalidad (Shapiro p-value)" = "norm_pvalue",
                          "Homocedasticidad (BP p-value)" = "homo_pvalue",
                          "Autocorrelación (Ljung-Box p-value)" = "ac_pvalue"
                        ),
                        selected = "mape"
                      ),
-                     plotlyOutput("metric_facet")
+                     plotlyOutput("metric_facet", height = "600px")
             )
           )
         )
@@ -136,7 +147,18 @@ server <- function(input, output, session) {
   arimax <- reactive({
     key <- get_model_key(input$daypart, input$age_range, input$hours, input$date)
     print(paste("Buscando modelo con clave:", key))
-    model_file <- model_lookup[[key]]
+    model_file <- model_lookup_arimax[[key]]
+    if (is.null(model_file) || !file.exists(model_file)) {
+      showNotification("No hay modelo pre-entrenado para esta combinación.", type = "error")
+      return(NULL)
+    }
+    readRDS(model_file)
+  })
+  
+  glmnet <- reactive({
+    key <- get_model_key(input$daypart, input$age_range, input$hours, input$date)
+    print(paste("Buscando modelo con clave:", key))
+    model_file <- model_lookup_glmnet[[key]]
     if (is.null(model_file) || !file.exists(model_file)) {
       showNotification("No hay modelo pre-entrenado para esta combinación.", type = "error")
       return(NULL)
@@ -148,8 +170,12 @@ server <- function(input, output, session) {
     arimax()$fit
   })
   
+  glmnet_fit <- reactive({
+    glmnet()$fit
+  })
+  
   arimax_model_tbl <- reactive({
-    modeltime_table(arimax_fit())
+    modeltime_table(arimax_fit(), glmnet_fit())
   })
   
   # Plots
@@ -206,8 +232,12 @@ server <- function(input, output, session) {
   })
   
   output$printFit <- renderPrint({
-    arimax_fit() |>
-      extract_fit_parsnip()
+    cat("🔹 Modelo ARIMAX:\n")
+    print(arimax_fit() |> extract_fit_parsnip())
+    
+    cat("\n\n🔹 Modelo GLMNET:\n")
+    print(glmnet_fit() |> extract_fit_parsnip()|> 
+            tidy(),n=24)
   })
   
   output$printAccurary <- renderPrint({
@@ -250,6 +280,10 @@ server <- function(input, output, session) {
       
       acc <- modeltime_accuracy(calibrated)
       mape_val <- acc$mape |> round(1)
+      rmse_val <- acc$rmse |> round(1)
+      mse_val  <- (acc$rmse)^2 |> round(1)
+      rsq_val  <- acc$rsq  |> round(2)
+      mae_val  <- acc$mae  |> round(1)
       
       resids <- modeltime_residuals(calibrated)$.residuals
       preds <- modeltime_residuals(calibrated)$.prediction
@@ -274,6 +308,10 @@ server <- function(input, output, session) {
       parse_model_filename(basename(f)) |>
         mutate(
           mape = mape_val,
+          rmse = rmse_val,
+          mse = mse_val,
+          rsq = rsq_val,
+          mae = mae_val,
           norm_pvalue = norm_pvalue,
           homo_pvalue = homo_pvalue,
           ac_pvalue = ac_pvalue
@@ -297,16 +335,22 @@ server <- function(input, output, session) {
     ggplotly(
       ggplot(df, aes(x = .data[[metric]])) +
         geom_histogram(fill = "#0073C2FF", color = "white", bins = 20) +
+        facet_wrap(vars(model, date), nrow = 2) +
         labs(
           x = names(which(c(
             mape = "MAPE",
+            rmse = "RMSE",
+            mse = "MSE",
+            mae = "MAE",
+            rsq = "R²",
             norm_pvalue = "Normalidad (Shapiro p-value)",
             homo_pvalue = "Homocedasticidad (BP p-value)",
             ac_pvalue = "Autocorrelación (Ljung-Box p-value)"
           ) == metric)),
           y = "Frecuencia"
         ) +
-        theme_minimal()
+        theme_minimal() +
+        theme(panel.spacing = unit(2, "lines"))
     )
   })
   
@@ -331,18 +375,23 @@ server <- function(input, output, session) {
       ) +
         geom_point(size = 3) +
         geom_line() +
-        facet_wrap(~date) +
+        facet_wrap(vars(model, date), nrow = 2) +
         labs(
           x = "Hour",
           y = names(which(c(
             mape = "MAPE",
+            rmse = "RMSE",
+            mse = "RMSE",
+            mae = "MAE",
+            rsq = "R²",
             norm_pvalue = "Normalidad (Shapiro p-value)",
             homo_pvalue = "Homocedasticidad (BP p-value)",
             ac_pvalue = "Autocorrelación (Ljung-Box p-value)"
           ) == metric)),
           color = "Age Range"
         ) +
-        theme_minimal(),
+        theme_minimal() +
+        theme(panel.spacing = unit(2, "lines")),
       tooltip = "text"
     ) |>
       layout(
