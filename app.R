@@ -80,7 +80,7 @@ ui <- fluidPage(
           "Residuals", br(),
           tabsetPanel(
             tabPanel("Time Plot", plotlyOutput("timeplot_resid")),
-            tabPanel("ACF", plotOutput("acf_resid"))
+            tabPanel("ACF", plotlyOutput("acf_resid", height = "500px"))
           )
         ),
         tabPanel(
@@ -104,7 +104,7 @@ ui <- fluidPage(
                        ),
                        selected = "mape"
                      ),
-                     plotlyOutput("metric_hist", height = "600px")
+                     plotlyOutput("metric_hist", height = "500px")
             ),
             tabPanel("Metrics Facet", 
                      br(),
@@ -123,7 +123,7 @@ ui <- fluidPage(
                        ),
                        selected = "mape"
                      ),
-                     plotlyOutput("metric_facet", height = "600px")
+                     plotlyOutput("metric_facet", height = "500px")
             )
           )
         )
@@ -258,15 +258,16 @@ server <- function(input, output, session) {
     )
   })
   
-  output$acf_resid <- renderPlot({
+  output$acf_resid <- renderPlotly({
     splits <- arimax()$splits
-    
-    resid <- 
+    ggplotly(
       arimax_model_tbl() |>
-      modeltime_calibrate(new_data = testing(splits)) |>
-      modeltime_residuals() |> pull()
-    
-    plot(acf(resid, lag = 7, main = NULL))
+        modeltime_calibrate(new_data = testing(splits)) |>
+        modeltime_residuals() |> 
+        plot_modeltime_residuals(.type = "acf", .interactive = F) +
+        labs(title = NULL) +
+        theme(legend.position = "none")
+    )
   })
   
   # Metrics for all models
