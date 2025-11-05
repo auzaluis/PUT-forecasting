@@ -1,18 +1,17 @@
 pacman::p_load(
   timetk,
   tidyverse,
-  tsibble
+  tsibble,
+  readxl
 )
 
-superbowl_dates <- as.Date(c(
-  "2022-02-13",
-  "2023-02-12",
-  "2024-02-11",
-  "2025-02-09",
-  "2026-02-08"
-))
+feature_dates<-read_excel("data/features.xlsx") 
+features<-list()
+for(i in 1:ncol(feature_dates)){
+  features[[i]]<-(feature_dates %>% pull(i) %>% na.omit()%>% as.Date())
+}
 
-add_features <- function(data, superbowl_input) {
+add_features <- function(data, features_input) {
   data |> 
     tk_augment_timeseries_signature(.date_var = .date_var) |>
     tk_augment_holiday_signature(
@@ -30,7 +29,16 @@ add_features <- function(data, superbowl_input) {
         locale_US == 1 & wday.lbl %in% c("Tuesday", "Wednesday", "Thursday"),
         1, 0
       ),
-      superbowl = ifelse(.date_var %in% superbowl_input, 1, 0),
+      endyear = ifelse(.date_var %in% features[[1]], 1, 0),
+      newyear = ifelse(.date_var %in% features[[2]], 1, 0),
+      christmas = ifelse(.date_var %in% features[[3]], 1, 0),
+      christmas_eve = ifelse(.date_var %in% features[[4]], 1, 0),
+      thanksgiving = ifelse(.date_var %in% features[[5]], 1, 0),
+      mundial = ifelse(.date_var %in% features[[6]], 1, 0),
+      olimpics = ifelse(.date_var %in% features[[7]], 1, 0),
+      mnf = ifelse(.date_var %in% features[[8]], 1, 0),
+      superbowl = ifelse(.date_var %in% features[[9]], 1, 0),
+      sunday_nfl = ifelse(.date_var %in% features[[10]], 1, 0),
       trend = row_number()
     ) |>
     select(
@@ -42,7 +50,16 @@ add_features <- function(data, superbowl_input) {
       dst_flag,
       wknd_holiday,
       wday_holiday,
+      endyear,
+      newyear,
+      christmas,
+      christmas_eve,
+      thanksgiving,
+      mundial,
+      olimpics,
+      mnf,
       superbowl,
+      sunday_nfl,
       trend
     )
 }

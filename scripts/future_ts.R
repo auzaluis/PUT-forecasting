@@ -2,8 +2,8 @@ library(timetk)
 library(tsibble)
 library(tidyverse)
 
-generate_future_ts <- function(data, hours, superbowl) {
-  
+generate_future_ts <- function(data, hours, features_dates) {
+  #features<-feature_dates
   print(data)
   
   max_datetime <- data |>
@@ -50,7 +50,16 @@ generate_future_ts <- function(data, hours, superbowl) {
       wknd_holiday,
       wday_holiday
     ) |> 
-    mutate(superbowl = ifelse(.date_var %in% superbowl, 1, 0) |> as.integer()) |> 
+    mutate(endyear = ifelse(.date_var %in% features_dates[[1]], 1, 0) |> as.integer(),
+           newyear = ifelse(.date_var %in% features_dates[[2]], 1, 0) |> as.integer(),
+           christmas = ifelse(.date_var %in% features_dates[[3]], 1, 0) |> as.integer(),
+           christmas_eve = ifelse(.date_var %in% features_dates[[4]], 1, 0) |> as.integer(),
+           thanksgiving = ifelse(.date_var %in% features_dates[[5]], 1, 0) |> as.integer(),
+           mundial = ifelse(.date_var %in% features_dates[[6]], 1, 0) |> as.integer(),
+           olimpics = ifelse(.date_var %in% features_dates[[7]], 1, 0) |> as.integer(),
+           mnf = ifelse(.date_var %in% features_dates[[8]], 1, 0) |> as.integer(),
+           superbowl = ifelse(.date_var %in% features_dates[[9]], 1, 0) |> as.integer(),
+           sunday_nfl = ifelse(.date_var %in% features_dates[[10]], 1, 0) |> as.integer()) |> 
     arrange(.date_var) |> 
     mutate(trend = max(data$trend) + row_number()) |> 
     as_tsibble(index = .date_var)

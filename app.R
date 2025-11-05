@@ -7,7 +7,8 @@ pacman::p_load(
   plotly,
   shinyWidgets,
   DT,
-  lmtest
+  lmtest,
+  timetk
 )
 
 # Modules
@@ -20,7 +21,7 @@ source("scripts/utils.R")
 models_path <- "data/models"
 model_files_arimax <- list.files(models_path, pattern = "(^arimax_.*)\\.rds$", full.names = TRUE)
 model_files_glmnet <- list.files(models_path, pattern = "(^glmnet_.*)\\.rds$", full.names = TRUE)
-model_files <- c(model_files_arimax, model_files_glmnet)
+model_files<-c(model_files_arimax,model_files_glmnet)
 
 raw_data_path <- "data/raw_data.parquet"
 df <- load_data(raw_data_path)
@@ -49,8 +50,8 @@ ui <- fluidPage(
       ),
       pickerInput(
         "daypart", "Daypart:",
-        choices = unique(df$daypart)[3], # limit to total_day for simplicity
-        selected = unique(df$daypart)[3]
+        choices = unique(df$daypart)[1], # limit to total_day for simplicity
+        selected = unique(df$daypart)[1]
       ),
       pickerInput(
         "hours", "Hours:",
@@ -80,7 +81,7 @@ ui <- fluidPage(
           "Residuals", br(),
           tabsetPanel(
             tabPanel("Time Plot", plotlyOutput("timeplot_resid")),
-            tabPanel("ACF", plotlyOutput("acf_resid", height = "500px"))
+            tabPanel("ACF", plotOutput("acf_resid"))
           )
         ),
         tabPanel(
@@ -104,7 +105,7 @@ ui <- fluidPage(
                        ),
                        selected = "mape"
                      ),
-                     plotlyOutput("metric_hist", height = "500px")
+                     plotlyOutput("metric_hist")
             ),
             tabPanel("Metrics Facet", 
                      br(),
@@ -123,7 +124,7 @@ ui <- fluidPage(
                        ),
                        selected = "mape"
                      ),
-                     plotlyOutput("metric_facet", height = "500px")
+                     plotlyOutput("metric_facet")
             )
           )
         )
@@ -154,8 +155,8 @@ server <- function(input, output, session) {
     }
     readRDS(model_file)
   })
-  
-  glmnet <- reactive({
+
+    glmnet <- reactive({
     key <- get_model_key(input$daypart, input$age_range, input$hours, input$date)
     print(paste("Buscando modelo con clave:", key))
     model_file <- model_lookup_glmnet[[key]]
@@ -165,18 +166,17 @@ server <- function(input, output, session) {
     }
     readRDS(model_file)
   })
-  
   arimax_fit <- reactive({
     arimax()$fit
   })
-  
   glmnet_fit <- reactive({
     glmnet()$fit
   })
   
   arimax_model_tbl <- reactive({
-    modeltime_table(arimax_fit(), glmnet_fit())
+    modeltime_table(arimax_fit(),glmnet_fit())
   })
+
   
   # Plots
   output$forecastPlot <- renderPlotly({
@@ -207,7 +207,7 @@ server <- function(input, output, session) {
   output$refit_forecastPlot <- renderPlotly({
     splits <- arimax()$splits
     ts_data <- ts()
-    future <- generate_future_ts(ts() |> as_tibble(), input$hours, superbowl_dates)
+    future <- generate_future_ts(ts() |> as_tibble(), input$hours, features)
     new_data <- bind_rows(testing(splits), future)
     ggplotly(
       arimax_model_tbl() |>
@@ -239,7 +239,7 @@ server <- function(input, output, session) {
     print(glmnet_fit() |> extract_fit_parsnip()|> 
             tidy(),n=24)
   })
-  
+
   output$printAccurary <- renderPrint({
     splits <- arimax()$splits
     arimax_model_tbl() |>
@@ -258,18 +258,28 @@ server <- function(input, output, session) {
     )
   })
   
-  output$acf_resid <- renderPlotly({
-    splits <- arimax()$splits
-    ggplotly(
-      arimax_model_tbl() |>
-        modeltime_calibrate(new_data = testing(splits)) |>
-        modeltime_residuals() |> 
-        plot_modeltime_residuals(.type = "acf", .interactive = F) +
-        labs(title = NULL) +
-        theme(legend.position = "none")
-    )
+  output$acf_resid <- renderPlot({
+    splits <- arimax()$splits 
+    calibrated_tbl <- arimax_model_tbl() |>
+      modeltime_calibrate(new_data = testing(splits))
+    
+    residuals_tbl <- modeltime_residuals(calibrated_tbl)
+    
+    model_ids <- unique(residuals_tbl$.model_id)
+    model_descs <- unique(residuals_tbl$.model_desc)
+    
+    par(mfrow = c(1,length(model_ids)))  
+    
+    # Graficar ACF
+    for (i in seq_along(model_ids)) {
+      resids <- residuals_tbl |>
+        filter(.model_id == model_ids[i]) |>
+        pull(.residuals)
+      
+      acf(resids, main = paste("ACF -", model_descs[i]))
+    }
   })
-  
+
   # Metrics for all models
   all_metrics <- reactive({
     map_dfr(model_files, function(f) {
@@ -336,7 +346,6 @@ server <- function(input, output, session) {
     ggplotly(
       ggplot(df, aes(x = .data[[metric]])) +
         geom_histogram(fill = "#0073C2FF", color = "white", bins = 20) +
-        facet_wrap(vars(model, date), nrow = 2) +
         labs(
           x = names(which(c(
             mape = "MAPE",
@@ -349,9 +358,8 @@ server <- function(input, output, session) {
             ac_pvalue = "Autocorrelación (Ljung-Box p-value)"
           ) == metric)),
           y = "Frecuencia"
-        ) +
-        theme_minimal() +
-        theme(panel.spacing = unit(2, "lines"))
+        ) +facet_wrap(model~date)+
+        theme_minimal()
     )
   })
   
@@ -376,7 +384,7 @@ server <- function(input, output, session) {
       ) +
         geom_point(size = 3) +
         geom_line() +
-        facet_wrap(vars(model, date), nrow = 2) +
+        facet_wrap(model~date) +
         labs(
           x = "Hour",
           y = names(which(c(
@@ -391,8 +399,7 @@ server <- function(input, output, session) {
           ) == metric)),
           color = "Age Range"
         ) +
-        theme_minimal() +
-        theme(panel.spacing = unit(2, "lines")),
+        theme_minimal(),
       tooltip = "text"
     ) |>
       layout(

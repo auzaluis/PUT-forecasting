@@ -29,10 +29,11 @@ combinations <- expand.grid(
 models <- list()
 
 for (i in seq_len(nrow(combinations))) {
+  #i<-1
   combo <- combinations[i, ]
   print(combo)
   data <- preprocess_data(df_models, combo$daypart, combo$hour, combo$age_range, combo$date)
-  ts_data <- add_features(data, superbowl_dates)
+  ts_data <- add_features(data, features)
   fit_arimax <- train_arimax(ts_data)
   fit_glmnet <- train_glmnet(ts_data)
   key <- paste(
@@ -46,4 +47,4 @@ for (i in seq_len(nrow(combinations))) {
   print("arimax saved")
   saveRDS(fit_glmnet, file = file.path("data/models", paste0("glmnet_", key, ".rds")))
   print("glmnet saved")
-}
+  }
