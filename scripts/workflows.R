@@ -6,9 +6,10 @@ pacman::p_load(
 
 workflow_arimax <- function(ts_data) {
   recipe_arimax <- recipe(PUTs ~ ., data = ts_data) |> 
-    step_corr(all_numeric_predictors(), threshold = 0.9) |> 
-    step_naomit(all_predictors())
-  
+    step_naomit(all_predictors()) |> 
+    step_dummy(all_nominal_predictors()) |> 
+    step_corr(all_numeric_predictors(), threshold = 0.9)
+
   workflow() |> 
     add_model(arima_reg() |> set_engine("auto_arima")) |>
     add_recipe(recipe_arimax)
@@ -33,12 +34,13 @@ workflow_glmnet <- function(ts_data) {
     update_role(.date_var, new_role = "index")|>
     step_zv(all_predictors()) |> 
     step_dummy(all_nominal_predictors()) |> 
-    step_normalize(all_numeric_predictors())|> 
+  step_normalize(all_numeric_predictors())|> 
     step_naomit(all_predictors())
   
+
   modelo <- linear_reg(
-    penalty = 0.0001,   
-    mixture = 0 
+    penalty =0.0001,   
+    mixture = 1 
   ) %>%
     set_engine("glmnet") %>%
     set_mode("regression")

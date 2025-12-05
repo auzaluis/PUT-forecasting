@@ -1,6 +1,6 @@
 pacman::p_load(
   arrow,
-  tidyverse
+  tidyverse,Boruta,randomForest
 )
 
 load_data <- function(path) {

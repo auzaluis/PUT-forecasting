@@ -16,7 +16,6 @@ con <- dbConnect(
   billing = Sys.getenv("BQ_BILLING")
 )
 
-
 # Load template
 query_template <- paste(
   readLines("scripts/query_template.sql"),

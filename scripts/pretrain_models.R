@@ -16,8 +16,8 @@ df <- load_data(raw_data_path)
 # clean_name function
 date_values <- as.Date(c("2022-01-01", "2023-01-01"))
 
-df_models <- df |> 
-  filter(daypart == 'total_day')
+df_models <- df |>
+  filter(daypart=="total_day") 
 
 combinations <- expand.grid(
   daypart = unique(df_models$daypart),
