@@ -10,14 +10,14 @@ source("scripts/utils.R")
 
 # Load raw_data
 models_path <- "data/models"
-raw_data_path <- "data/raw_data.parquet"
+raw_data_path <- "data/raw_data_PUTs_Panel.parquet"
 df <- load_data(raw_data_path)
 
 # clean_name function
 date_values <- as.Date(c("2022-01-01", "2023-01-01"))
 
-df_models <- df |> 
-  filter(daypart == 'total_day')
+df_models <- df |>
+  filter(daypart=="total_day") 
 
 combinations <- expand.grid(
   daypart = unique(df_models$daypart),
@@ -29,10 +29,11 @@ combinations <- expand.grid(
 models <- list()
 
 for (i in seq_len(nrow(combinations))) {
+  #i<-1
   combo <- combinations[i, ]
   print(combo)
   data <- preprocess_data(df_models, combo$daypart, combo$hour, combo$age_range, combo$date)
-  ts_data <- add_features(data, superbowl_dates)
+  ts_data <- add_features(data, features)
   fit_arimax <- train_arimax(ts_data)
   fit_glmnet <- train_glmnet(ts_data)
   key <- paste(
@@ -46,4 +47,4 @@ for (i in seq_len(nrow(combinations))) {
   print("arimax saved")
   saveRDS(fit_glmnet, file = file.path("data/models", paste0("glmnet_", key, ".rds")))
   print("glmnet saved")
-}
+  }

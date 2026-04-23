@@ -15,8 +15,6 @@ con <- dbConnect(
   dataset = Sys.getenv("BQ_DATASET"),
   billing = Sys.getenv("BQ_BILLING")
 )
-
-
 # Load template
 query_template <- paste(
   readLines("scripts/query_template.sql"),
@@ -26,14 +24,16 @@ query_template <- paste(
 
 # Arguments
 stream          <- "Live+SDP"
-hispanic_flag   <- "Hispanic PUTs"
+hispanic_flag   <- "National PUTs"
 start_date      <- "2021-12-27"
-end_date        <- "2025-12-31"
+end_date        <- "2026-03-31"
+#data_type       <- "Updated BigData"
+data_type       <- "Panel"
 
 dayparts <- list(
   daytime = 7:18,
   prime_time = 19:22,
-  total_day = c(0:1, 7:23)
+  total_day = c(0:1, 2:23)
 )
 
 age <- list(
@@ -65,6 +65,7 @@ queries <- map2_chr(
       template = glue_sql(.con = con,
                           query_template,
                           stream = stream,
+                          data_type=data_type,## aqui
                           hispanic_flag = hispanic_flag,
                           age = age[[.x]],
                           start_date = start_date,
@@ -83,8 +84,8 @@ cat(final_query)
 
 
 # Run the query
-df <- dbGetQuery(con, final_query)
+df_panel<- dbGetQuery(con, final_query)
 
 
 # Save the results to a Parquet file
-write_parquet(df, "data/raw_data.parquet")
+#write_parquet(df_panel, "data/raw_data_PUTs_Panel.parquet")

@@ -24,6 +24,8 @@ SELECT
     CONCAT(
       CAST(start_date AS STRING), ' ', FORMAT('%02d', hours), ':', FORMAT('%02d', quarter_hour), ':00'
     ) AS full_time,
+    -- Data source
+    data_type,
 
     -- Demographics
     hispanic_flag,
@@ -53,6 +55,7 @@ FROM
     `dl-datalake-gold-prd.nielsen_gold.gold_nielsen_record_usage_p`
 WHERE
     stream = {stream}
+    AND data_type={data_type}
     AND hispanic_flag = {hispanic_flag}
     AND age IN ({age*})
     AND hours IN ({daypart*})

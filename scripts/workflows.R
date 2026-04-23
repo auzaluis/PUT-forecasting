@@ -4,22 +4,18 @@ pacman::p_load(
   tsibble
 )
 
-# Parámetros que aplican para todos los modelos
-split <- 0.9
-
-
-# SARIMAX
 workflow_arimax <- function(ts_data) {
   recipe_arimax <- recipe(PUTs ~ ., data = ts_data) |> 
-    step_corr(all_numeric_predictors(), threshold = 0.9) |> 
-    step_naomit(all_predictors())
-  
+    step_naomit(all_predictors()) |> 
+    step_dummy(all_nominal_predictors()) |> 
+    step_corr(all_numeric_predictors(), threshold = 0.9)
+
   workflow() |> 
     add_model(arima_reg() |> set_engine("auto_arima")) |>
     add_recipe(recipe_arimax)
 }
 
-train_arimax <- function(ts_data, split_prop = split, fit_data = NULL) {
+train_arimax <- function(ts_data, split_prop = 0.9, fit_data = NULL) {
   splits <- initial_time_split(ts_data, prop = split_prop)
   wf_arimax <- workflow_arimax(training(splits))
   if (is.null(fit_data)) {
@@ -33,20 +29,20 @@ train_arimax <- function(ts_data, split_prop = split, fit_data = NULL) {
   )
 }
 
-
-# GLMNET
 workflow_glmnet <- function(ts_data) {
   recipe_glmnet <- recipe(PUTs ~., data = ts_data) |>
     update_role(.date_var, new_role = "index")|>
+    step_zv(all_predictors()) |> 
     step_dummy(all_nominal_predictors()) |> 
-    step_normalize(all_numeric_predictors())|> 
+  step_normalize(all_numeric_predictors())|> 
     step_naomit(all_predictors())
   
+
   modelo <- linear_reg(
-    penalty = 0.0001,   
-    mixture = 0 
-  ) |> 
-    set_engine("glmnet") |> 
+    penalty =0.0001,   
+    mixture = 1 
+  ) %>%
+    set_engine("glmnet") %>%
     set_mode("regression")
   
   workflow() |>
@@ -54,7 +50,7 @@ workflow_glmnet <- function(ts_data) {
     add_model(modelo)
 }
 
-train_glmnet <- function(ts_data, split_prop = split, fit_data = NULL) {
+train_glmnet <- function(ts_data, split_prop = 0.9, fit_data = NULL) {
   splits <- initial_time_split(ts_data, prop = split_prop)
   wf_glmnet <- workflow_glmnet(training(splits))
   if (is.null(fit_data)) {
