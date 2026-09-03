@@ -54,6 +54,7 @@ FROM
 WHERE
     stream = {stream}
     AND hispanic_flag = {hispanic_flag}
+    AND data_type = {data_type}  -- <- Agregar esta línea
     AND age IN ({age*})
     AND hours IN ({daypart*})
     AND start_date BETWEEN {start_date} AND {end_date}

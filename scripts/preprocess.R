@@ -3,6 +3,7 @@ pacman::p_load(
   tidyverse,Boruta,randomForest
 )
 
+
 load_data <- function(path) {
   read_parquet(path) |>
     mutate(
@@ -12,6 +13,7 @@ load_data <- function(path) {
       hour = hour(intervals_dim)
     )
 }
+
 
 preprocess_data <- function(data, daypart_input, hour_input, age_input, date_input) {
   data |>
@@ -26,3 +28,5 @@ preprocess_data <- function(data, daypart_input, hour_input, age_input, date_inp
     arrange(.date_var) |>
     ungroup()
 }
+
+

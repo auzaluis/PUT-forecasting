@@ -1,4 +1,4 @@
-EDA/
-.env
-.Rhistory
 .Rproj.user
+.Rhistory
+.RData
+.Ruserdata

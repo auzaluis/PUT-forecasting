@@ -1,19 +1,24 @@
-pacman::p_load(
-  timetk,
-  tidyverse,
-  tsibble,
-  readxl
-)
+pacman::p_load(timetk, tidyverse, tsibble, readxl)
 
-feature_dates<-read_excel("data/features_2.xlsx") 
-features<-list()
-for(i in 1:ncol(feature_dates)){
-  features[[i]]<-(feature_dates %>% pull(i) %>% na.omit()%>% as.Date())
-}
+# Carga limpia de features desde Excel
+feature_dates <- read_excel("data/features_2.xlsx") 
 
-add_features <- function(data, features_input) {
-  #features_input<-features
-  data |> 
+features <- map(1:ncol(feature_dates), ~ {
+  feature_dates %>% 
+    pull(.x) %>% 
+    na.omit() %>% 
+    as.Date()
+})
+
+
+add_features <- function(data, features_input = features) {
+  
+  has_user_hour <- "hour" %in% names(data)
+  if (has_user_hour) {
+    data <- data %>% rename(hour_orig = hour)
+  }
+  
+  df_feat <- data |> 
     tk_augment_timeseries_signature(.date_var = .date_var) |>
     tk_augment_holiday_signature(
       .date_var = .date_var,
@@ -22,52 +27,53 @@ add_features <- function(data, features_input) {
       .exchange_set = "none"
     ) |>
     mutate(
-      wknd_holiday = ifelse(
-        locale_US == 1 & wday.lbl %in% c("Friday", "Saturday", "Sunday", "Monday"),
-        1, 0
+      wknd_holiday = ifelse(locale_US == 1 & wday.lbl %in% c("Friday", "Saturday", "Sunday", "Monday"), 1L, 0L),
+      wday_holiday = ifelse(locale_US == 1 & wday.lbl %in% c("Tuesday", "Wednesday", "Thursday"), 1L, 0L),
+      
+      endyear       = ifelse(.date_var %in% features_input[[1]], 1L, 0L),
+      newyear       = ifelse(.date_var %in% features_input[[2]], 1L, 0L),
+      christmas     = ifelse(.date_var %in% features_input[[3]], 1L, 0L),
+      christmas_eve = ifelse(.date_var %in% features_input[[4]], 1L, 0L),
+      thanksgiving  = ifelse(.date_var %in% features_input[[5]], 1L, 0L),
+      
+      football_cup  = case_when(
+        .date_var %in% features_input[[6]]  ~ 1L,
+        .date_var %in% features_input[[11]] ~ 2L,
+        .date_var %in% features_input[[12]] ~ 3L,
+        TRUE ~ 0L
       ),
-      wday_holiday = ifelse(
-        locale_US == 1 & wday.lbl %in% c("Tuesday", "Wednesday", "Thursday"),
-        1, 0
-      ),
-      endyear = ifelse(.date_var %in% features[[1]], 1, 0),
-      newyear = ifelse(.date_var %in% features[[2]], 1, 0),
-      christmas = ifelse(.date_var %in% features[[3]], 1, 0),
-      christmas_eve = ifelse(.date_var %in% features[[4]], 1, 0),
-      thanksgiving = ifelse(.date_var %in% features[[5]], 1, 0),
-      football_cup = ifelse(.date_var %in% features[[6]], 1,
-                            ifelse( .date_var %in% features[[11]],2,ifelse( .date_var %in% features[[12]],3,0))),
-      olimpics = ifelse(.date_var %in% features[[7]], 1, 0),
-      mnf = ifelse(.date_var %in% features[[8]], 1, 0),
-      superbowl = ifelse(.date_var %in% features[[9]], 1, 0),
-      sunday_nfl = ifelse(.date_var %in% features[[10]], 1, 0),
-      tnf = ifelse(.date_var %in% features[[13]], 1, 0),
-      nba = ifelse(.date_var %in% features[[14]], 1, 0),
-      mlb = ifelse(.date_var %in% features[[15]], 1, 0),
-      trend = row_number()
-    ) |>
+      
+      olimpics   = ifelse(.date_var %in% features_input[[7]], 1L, 0L),
+      mnf        = ifelse(.date_var %in% features_input[[8]], 1L, 0L),
+      superbowl  = ifelse(.date_var %in% features_input[[9]], 1L, 0L),
+      sunday_nfl = ifelse(.date_var %in% features_input[[10]], 1L, 0L),
+      tnf        = ifelse(.date_var %in% features_input[[13]], 1L, 0L),
+      nba        = ifelse(.date_var %in% features_input[[14]], 1L, 0L),
+      mlb        = ifelse(.date_var %in% features_input[[15]], 1L, 0L),
+      trend      = row_number(),
+      
+      # Variable de cambio de universo
+      cambiodeuniverso = ifelse(.date_var > as.Date("2026-01-31"), 1L, 0L),
+      
+      # 🟢 NUEVO: Lags precalculados en los datos históricos
+      lag_5 = lag(PUTs, 5),
+      lag_7 = lag(PUTs, 7)
+    )
+  
+  if ("hour_orig" %in% names(df_feat)) {
+    df_feat <- df_feat %>% 
+      select(-hour) %>% 
+      rename(hour = hour_orig)
+  }
+  
+  df_feat %>% 
     select(
-      .date_var,
-      PUTs,
-      year,
-      month.lbl,
-      wday.lbl,
-      dst_flag,
-      wknd_holiday,
-      wday_holiday,
-      endyear,
-      newyear,
-      christmas,
-      christmas_eve,
-      thanksgiving,
-      football_cup,
-      olimpics,
-      mnf,
-      superbowl,
-      sunday_nfl,
-      tnf,
-      nba,
-      mlb,
-      trend
+      any_of(c("daypart", "age_range", "hour")),
+      .date_var, PUTs, year, month.lbl, wday.lbl, dst_flag,
+      wknd_holiday, wday_holiday, endyear, newyear, christmas,
+      christmas_eve, thanksgiving, football_cup, olimpics, mnf,
+      superbowl, sunday_nfl, tnf, nba, mlb, trend,
+      cambiodeuniverso,
+      lag_5, lag_7 # 🟢 Incluir los lags en la selección
     )
 }
