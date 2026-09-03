@@ -8,19 +8,14 @@ pacman::p_load(
 
 workflow_arimax <- function(ts_data) {
   recipe_arimax <- recipe(PUTs ~ ., data = ts_data) |> 
-    step_rm(any_of(c("lag_5", "lag_7"))) |> 
+    step_rm(lag_5, lag_7) |> 
     step_naomit(all_predictors()) |> 
-    # 1. Crear primero todas las dummies categóricas
-    step_dummy(all_nominal_predictors()) |> 
-    # 2. Eliminar variables con varianza cero (incluyendo dummies recién creadas)
     step_zv(all_predictors()) |> 
-    # 3. 🟢 CLAVE: Eliminar variables que generan dependencia lineal / Rank Deficiency
-    step_lincomb(all_numeric_predictors()) |> 
-    # 4. Eliminar variables altamente correlacionadas
+    step_dummy(all_nominal_predictors()) |> 
     step_corr(all_numeric_predictors(), threshold = 0.9)
   
   workflow() |> 
-    add_model(arima_reg() |> set_engine("auto_arima")) |> 
+    add_model(arima_reg() |> set_engine("auto_arima")) |>
     add_recipe(recipe_arimax)
 }
 

@@ -102,14 +102,9 @@ model_files <- c(model_files_arimax, model_files_glmnet)
 raw_data_path <- "data/raw_data_PUTs_Panel.parquet"
 df <- load_data(raw_data_path) |> filter(daypart == "total_day")
 
-# Asumiendo que la columna de fechas en 'df' se llama 'date' o '.date_var':
-min_data_date <- min(df$.date_var, na.rm = TRUE)
-
 model_lookup_arimax <- setNames(model_files_arimax, gsub("arimax_|\\.rds", "", basename(model_files_arimax)))
 model_lookup_glmnet <- setNames(model_files_glmnet, gsub("glmnet_|\\.rds", "", basename(model_files_glmnet)))
-
-
-#date_values <- as.Date(c("2022-01-01", "2023-01-01"))
+date_values <- as.Date(c("2022-01-01", "2023-01-01"))
 
 # ==========================================
 # 4. INTERFAZ DE USUARIO (UI)
@@ -118,9 +113,7 @@ ui <- fluidPage(
   titlePanel("People Using TV Forecasting (Rolling Validation 90/10)"),
   sidebarLayout(
     sidebarPanel(
-      # En la sección sidebarPanel():
-      # Opción recomendable: Desactivar o fijar a la única fecha disponible
-      pickerInput("date", "Data Start Date:", choices = min_data_date, selected = min_data_date),
+      pickerInput("date", "From", choices = unique(date_values), selected = unique(date_values)[2]),
       pickerInput("age_range", "Age Range:", choices = unique(df$age_range)),
       pickerInput("daypart", "Daypart:", choices = unique(df$daypart)[1], selected = unique(df$daypart)[1]),
       pickerInput("hours", "Hours:", choices = sort(unique(df$hour)), selected = 20),
@@ -175,10 +168,7 @@ ui <- fluidPage(
 # ==========================================
 server <- function(input, output, session) {
   
-  # Si removiste input$date de la UI, reemplázalo por min_data_date
-  df1 <- reactive({ 
-    preprocess_data(df, input$daypart, input$hours, input$age_range, min_data_date) 
-  })
+  df1 <- reactive({ preprocess_data(df, input$daypart, input$hours, input$age_range, input$date) })
   ts <- reactive({ add_features(df1(), features) })
   
   arimax_obj <- reactive({
@@ -299,7 +289,7 @@ server <- function(input, output, session) {
     w_ari <- round(calc_weighted_metric(df_ari$mape), 4)
     w_glm <- round(calc_weighted_metric(df_glm$mape), 4)
     
-    mape_text <- paste0("<b>MAPE Ponderado (CV 13 meses):</b><br>ARIMAX: ", w_ari, "<br>GLMNET: ", w_glm)
+    mape_text <- paste0("<b>MAPE Ponderado (CV 13m):</b><br>ARIMAX: ", w_ari, "<br>GLMNET: ", w_glm)
     
     p <- ggplot(cv_data, aes(x = cutoff_date, y = mape, color = model, group = model)) +
       geom_line(size = 1) + 
@@ -395,23 +385,17 @@ server <- function(input, output, session) {
     contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
   )
   
-  # Gráfico de Histograma
   output$metric_hist <- renderPlotly({
     metric <- input$metric_hist_input
     p <- ggplot(all_metrics(), aes(x = .data[[metric]])) +
-      geom_histogram(fill = "#0073C2FF", color = "white", bins = 20) + 
-      facet_wrap(~ model) + # 🟢 Cambiado: Ya no requiere ~ date
-      theme_minimal()
+      geom_histogram(fill = "#0073C2FF", color = "white", bins = 20) + facet_wrap(model ~ date) + theme_minimal()
     ggplotly(p)
   })
   
-  # Gráfico de Facetas
   output$metric_facet <- renderPlotly({
     metric <- input$metric_facet_input
     p <- ggplot(all_metrics(), aes(x = hour, y = .data[[metric]], color = age_range, group = age_range)) +
-      geom_point(size = 3) + geom_line() + 
-      facet_wrap(~ model) + # 🟢 Cambiado: Ya no requiere ~ date
-      theme_minimal()
+      geom_point(size = 3) + geom_line() + facet_wrap(model ~ date) + theme_minimal()
     ggplotly(p)
   })
   

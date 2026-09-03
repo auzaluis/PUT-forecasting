@@ -8,7 +8,6 @@ library(purrr)
 library(arrow)
 
 
-
 # Connect to BigQuery
 con <- dbConnect(
   bigrquery::bigquery(),
@@ -18,7 +17,7 @@ con <- dbConnect(
 )
 
 
-# Load template
+# Load template2
 query_template <- paste(
   readLines("scripts/query_template.sql"),
   collapse = "\n"
@@ -26,18 +25,12 @@ query_template <- paste(
 
 
 # Arguments
-#stream          <- "Live+SDP"
-#hispanic_flag   <- "Hispanic PUTs"
-#start_date      <- "2021-12-27"
-#end_date        <- "2026-03-31"
-
-# Arguments
 stream          <- "Live+SDP"
 hispanic_flag   <- "National PUTs"
 start_date      <- "2021-12-27"
 end_date        <- "2026-08-30"
-data_type       <- "Updated BigData"
-#data_type       <- "Panel"
+#data_type       <- "Updated BigData"
+data_type       <- "Panel"
 
 dayparts <- list(
   daytime = 7:18,
